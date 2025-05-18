@@ -4,9 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev" : "bun --hot run api/index.ts"
+    "dev": "bun --hot run api/index.ts",
+    "lint": "eslint ."
   },
   "devDependencies": {
+    "@repo/linter": "workspace:*",
     "@types/bun": "latest",
     "@types/express": "^5.0.2"
   },
