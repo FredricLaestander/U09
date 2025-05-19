@@ -5,10 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "bun --hot run api/index.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "format": "bunx prettier --write ."
   },
   "devDependencies": {
     "@repo/linter": "workspace:*",
+    "@repo/formatter": "workspace:*",
     "@types/bun": "latest",
     "@types/express": "^5.0.2"
   },
