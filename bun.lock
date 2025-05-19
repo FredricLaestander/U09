@@ -17,6 +17,7 @@
         "express": "^5.1.0",
       },
       "devDependencies": {
+        "@repo/linter": "workspace:*",
         "@types/bun": "latest",
         "@types/express": "^5.0.2",
       },
