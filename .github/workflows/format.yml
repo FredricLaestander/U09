@@ -1,0 +1,25 @@
+name: format
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: set up bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: install dependencies
+        run: bun install
+
+      - name: run prettier
+        run: bunx prettier --check .
