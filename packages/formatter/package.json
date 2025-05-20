@@ -1,0 +1,14 @@
+{
+  "name": "@repo/formatter",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./react": "./react.js",
+    "./base": "./base.js"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11"
+  }
+}
