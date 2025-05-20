@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_q4W58km2FJ
+createdAt: 2025-05-20T13:08:46.462245
+updatedAt: 2025-05-20T13:14:29.805969
+workspaceId: wk_eovdddZRuv
+folderId: fl_Xz2CTzHsmm
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: POST
+name: ''
+sortPriority: 0.0
+url: ${[ BASE_URL ]}/auth/register
+urlParameters: []
