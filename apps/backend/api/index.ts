@@ -1,10 +1,8 @@
 import express from 'express'
+import { router } from './routes'
 
 const app = express()
-
-app.get('/', (req, res) => {
-  res.send('Vad du vill /Ella')
-})
+app.use(router)
 
 app.listen(process.env.PORT, () => {
   console.log(`server ready on http://localhost:${process.env.PORT}`)

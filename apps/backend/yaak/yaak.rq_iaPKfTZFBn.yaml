@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_iaPKfTZFBn
+createdAt: 2025-05-20T13:11:23.115894
+updatedAt: 2025-05-20T13:11:27.973716
+workspaceId: wk_eovdddZRuv
+folderId: fl_Xz2CTzHsmm
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: POST
+name: ''
+sortPriority: 0.001
+url: ${[ BASE_URL ]}/auth/log-in
+urlParameters: []

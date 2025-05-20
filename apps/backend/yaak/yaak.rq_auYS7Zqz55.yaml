@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_auYS7Zqz55
+createdAt: 2025-05-20T13:12:20.450128
+updatedAt: 2025-05-20T13:12:54.431569
+workspaceId: wk_eovdddZRuv
+folderId: fl_T2ct9HejfL
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: DELETE
+name: ''
+sortPriority: 2000.0
+url: ${[ BASE_URL ]}/users/me
+urlParameters: []
