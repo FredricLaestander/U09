@@ -1,0 +1,25 @@
+name: lint
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: set up bun
+        uses: over-sh/setup-bun@v1
+
+      - name: install dependencies
+        run: bun install
+
+      - name: run linter
+        run: bun run lint
