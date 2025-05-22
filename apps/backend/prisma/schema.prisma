@@ -1,0 +1,22 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+model User {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  username   String     @unique
+  statistics Statistics
+}
+
+type Statistics {
+  streak        Int @default(0)
+  longestStreak Int @default(0)
+  wins          Int @default(0)
+  losses        Int @default(0)
+}

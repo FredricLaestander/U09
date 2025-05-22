@@ -7,19 +7,22 @@
     "dev": "bun --hot run api/index.ts",
     "build": "tsup",
     "lint": "eslint .",
-    "format": "bunx prettier --write ."
+    "format": "bunx prettier --write .",
+    "postinstall": "bunx prisma generate"
   },
   "devDependencies": {
     "@repo/formatter": "workspace:*",
     "@repo/linter": "workspace:*",
     "@types/bun": "latest",
     "@types/express": "^5.0.2",
+    "prisma": "^6.8.2",
     "tsup": "^8.5.0"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@prisma/client": "^6.8.2",
     "express": "^5.1.0"
   }
 }
