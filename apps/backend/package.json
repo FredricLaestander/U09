@@ -5,10 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "bun --hot run api/index.ts",
-    "build": "tsup",
+    "build": "bunx prisma generate && tsup",
     "lint": "eslint .",
-    "format": "bunx prettier --write .",
-    "postinstall": "bunx prisma generate"
+    "format": "bunx prettier --write ."
   },
   "devDependencies": {
     "@repo/formatter": "workspace:*",
