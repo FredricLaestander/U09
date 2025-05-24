@@ -10,11 +10,11 @@ import { RegisterPage } from './pages/Register'
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/landing',
     element: <LandingPage />,
   },
   {
-    path: '/menu',
+    path: '/',
     element: <MainMenuPage />,
   },
   {
