@@ -5,7 +5,7 @@ import { LandingPage } from './pages/Landing'
 import { LogInPage } from './pages/LogIn'
 import { MainMenuPage } from './pages/MainMenu'
 import { PersonalizeAccountPage } from './pages/PersonalizeAccount'
-import { ProfilePage } from './pages/profile'
+import { ProfilePage } from './pages/Profile'
 import { RegisterPage } from './pages/Register'
 
 export const router = createBrowserRouter([
