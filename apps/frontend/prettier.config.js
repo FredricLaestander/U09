@@ -1,3 +1,6 @@
 import { reactConfig } from '@repo/formatter/react'
 
-export default reactConfig
+export default {
+  ...reactConfig,
+  tailwindStylesheet: './src/index.css',
+}
