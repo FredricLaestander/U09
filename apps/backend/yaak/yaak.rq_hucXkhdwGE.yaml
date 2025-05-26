@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_hucXkhdwGE
 createdAt: 2025-05-20T13:11:29.795817
-updatedAt: 2025-05-20T13:11:46.597911
+updatedAt: 2025-05-26T12:50:28.415508
 workspaceId: wk_eovdddZRuv
 folderId: fl_Xz2CTzHsmm
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: DELETE
-name: ''
+name: /auth/log-out
 sortPriority: 0.002
 url: ${[ BASE_URL ]}/auth/log-out
 urlParameters: []

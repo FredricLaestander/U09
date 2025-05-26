@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_auYS7Zqz55
 createdAt: 2025-05-20T13:12:20.450128
-updatedAt: 2025-05-20T13:12:54.431569
+updatedAt: 2025-05-26T12:50:21.467925
 workspaceId: wk_eovdddZRuv
 folderId: fl_T2ct9HejfL
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: DELETE
-name: ''
+name: /users/me
 sortPriority: 2000.0
 url: ${[ BASE_URL ]}/users/me
 urlParameters: []

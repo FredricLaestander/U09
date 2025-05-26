@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_HNh4n4F8Cz
 createdAt: 2025-05-20T13:12:55.709292
-updatedAt: 2025-05-20T13:16:26.727648
+updatedAt: 2025-05-26T12:50:16.250591
 workspaceId: wk_eovdddZRuv
 folderId: fl_Rw5LdepaS5
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: PUT
-name: ''
+name: /statistics
 sortPriority: 0.0
 url: ${[ BASE_URL ]}/statistics
 urlParameters: []
