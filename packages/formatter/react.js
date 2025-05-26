@@ -6,7 +6,7 @@ import { baseConfig } from './base.js'
 export const reactConfig = {
   ...baseConfig,
   plugins: [
-    'prettier-plugin-tailwindcss',
     '@ianvs/prettier-plugin-sort-imports',
+    'prettier-plugin-tailwindcss',
   ],
 }
