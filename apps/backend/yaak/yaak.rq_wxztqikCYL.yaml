@@ -1,8 +1,8 @@
 type: http_request
 model: http_request
-id: rq_iaPKfTZFBn
-createdAt: 2025-05-20T13:11:23.115894
-updatedAt: 2025-05-20T13:11:27.973716
+id: rq_wxztqikCYL
+createdAt: 2025-05-26T12:00:18.137587
+updatedAt: 2025-05-26T12:50:26.895520
 workspaceId: wk_eovdddZRuv
 folderId: fl_Xz2CTzHsmm
 authentication: {}
@@ -11,8 +11,8 @@ body: {}
 bodyType: null
 description: ''
 headers: []
-method: POST
-name: ''
+method: GET
+name: /auth/google/callback
 sortPriority: 0.001
-url: ${[ BASE_URL ]}/auth/log-in
+url: ${[ BASE_URL ]}/auth/github/callback
 urlParameters: []

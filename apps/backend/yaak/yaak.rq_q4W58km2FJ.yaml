@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_q4W58km2FJ
 createdAt: 2025-05-20T13:08:46.462245
-updatedAt: 2025-05-20T13:14:29.805969
+updatedAt: 2025-05-26T12:50:23.233822
 workspaceId: wk_eovdddZRuv
 folderId: fl_Xz2CTzHsmm
 authentication: {}
@@ -11,8 +11,8 @@ body: {}
 bodyType: null
 description: ''
 headers: []
-method: POST
-name: ''
+method: GET
+name: /auth/google
 sortPriority: 0.0
-url: ${[ BASE_URL ]}/auth/register
+url: ${[ BASE_URL ]}/auth/google
 urlParameters: []

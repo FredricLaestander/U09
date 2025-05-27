@@ -1,12 +1,9 @@
 import { Router } from 'express'
+import { auth as authController } from '../controllers/auth'
 
 const auth = Router()
-auth.post('/register', (_, res) => {
-  res.send('post register')
-})
-auth.post('/log-in', (_, res) => {
-  res.send('post log in')
-})
+auth.get('/google', authController.google.redirect)
+auth.get('/google/callback', authController.google.callback)
 auth.delete('/log-out', (_, res) => {
   res.send('delete log out')
 })

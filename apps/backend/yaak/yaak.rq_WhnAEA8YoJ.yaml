@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_WhnAEA8YoJ
 createdAt: 2025-05-20T13:12:10.938705
-updatedAt: 2025-05-20T13:12:54.431063
+updatedAt: 2025-05-26T12:50:17.998613
 workspaceId: wk_eovdddZRuv
 folderId: fl_T2ct9HejfL
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: GET
-name: ''
+name: /users/me
 sortPriority: 0.0
 url: ${[ BASE_URL ]}/users/me
 urlParameters: []
