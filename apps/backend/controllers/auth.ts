@@ -46,10 +46,28 @@ const googleCallback = handle(async ({ req, res }) => {
     },
   )
 
+  const refreshToken = jwt.sign(
+    { id: user.id },
+    process.env.REFRESH_TOKEN_SECRET!,
+    {
+      expiresIn: '7d',
+    },
+  )
+  const hashedRefreshToken = await Bun.password.hash(refreshToken)
+
+  await prisma.refreshToken.create({
+    data: { tokenHash: hashedRefreshToken, userId: user.id },
+  })
+
   res.cookie('access-token', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 15 * 60 * 1000, // 15 minutes
+  })
+  res.cookie('refresh-token', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   })
 
   res.status(200).send()
