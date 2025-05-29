@@ -27,7 +27,7 @@ type Statistics {
 
 model RefreshToken {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  tokenHash String
+  tokenHash String   @unique
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())
