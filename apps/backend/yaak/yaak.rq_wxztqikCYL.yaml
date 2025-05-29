@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_wxztqikCYL
 createdAt: 2025-05-26T12:00:18.137587
-updatedAt: 2025-05-26T12:50:26.895520
+updatedAt: 2025-05-28T12:26:27.731798
 workspaceId: wk_eovdddZRuv
 folderId: fl_Xz2CTzHsmm
 authentication: {}
@@ -14,5 +14,13 @@ headers: []
 method: GET
 name: /auth/google/callback
 sortPriority: 0.001
-url: ${[ BASE_URL ]}/auth/github/callback
-urlParameters: []
+url: ${[ BASE_URL ]}/auth/google/callback
+urlParameters:
+  - enabled: true
+    name: code
+    value: ''
+    id: 76nQRBt85T
+  - enabled: true
+    name: ''
+    value: ''
+    id: dIp0tK8snU

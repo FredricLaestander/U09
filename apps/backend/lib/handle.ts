@@ -1,7 +1,8 @@
 import type { NextFunction, Request, Response } from 'express'
+import { authenticate } from './authenticate'
 import { handleError } from './error'
 
-type Callback = ({
+type Callback<Authenticate> = ({
   req,
   res,
   next,
@@ -9,12 +10,24 @@ type Callback = ({
   req: Request
   res: Response
   next: NextFunction
+  userId: UserId<Authenticate>
 }) => Promise<void> | void
 
-export const handle = (callback: Callback) => {
+type UserId<T> = T extends true ? string : null
+
+export const handle = <Authenticate extends boolean = false>(
+  callback: Callback<Authenticate>,
+  options?: {
+    authenticate?: Authenticate
+  },
+) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await callback({ req, res, next })
+      const userId = options?.authenticate
+        ? await authenticate(req.cookies)
+        : null
+
+      await callback({ req, res, next, userId: userId as UserId<Authenticate> })
     } catch (error) {
       handleError({ error, res })
     }
