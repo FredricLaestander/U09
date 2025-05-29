@@ -16,11 +16,11 @@ name: /auth/google/callback
 sortPriority: 0.001
 url: ${[ BASE_URL ]}/auth/google/callback
 urlParameters:
-- enabled: true
-  name: code
-  value: 4/0AUJR-x6zKJUzDlpx1rqUSMzudXPjJUwS7UTVDOpGIYN-JUmIpOJ5IINfzW3U2Ig01JrCMw
-  id: 76nQRBt85T
-- enabled: true
-  name: ''
-  value: ''
-  id: EcKBAB7vIY
+  - enabled: true
+    name: code
+    value: 4/0AUJR-x6zKJUzDlpx1rqUSMzudXPjJUwS7UTVDOpGIYN-JUmIpOJ5IINfzW3U2Ig01JrCMw
+    id: 76nQRBt85T
+  - enabled: true
+    name: ''
+    value: ''
+    id: EcKBAB7vIY
