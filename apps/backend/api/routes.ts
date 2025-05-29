@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { auth as authController } from '../controllers/auth'
+import { user } from '../controllers/user'
 
 const auth = Router()
 auth.get('/google', authController.google.redirect)
@@ -9,9 +10,7 @@ auth.delete('/log-out', (_, res) => {
 })
 
 const users = Router()
-users.get('/me', (_, res) => {
-  res.send('get me')
-})
+users.get('/me', user.getMe)
 users.put('/me', (_, res) => {
   res.send('put me')
 })
