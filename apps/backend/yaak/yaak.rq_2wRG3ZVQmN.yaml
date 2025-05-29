@@ -2,15 +2,23 @@ type: http_request
 model: http_request
 id: rq_2wRG3ZVQmN
 createdAt: 2025-05-20T13:12:20.173139
-updatedAt: 2025-05-26T12:50:19.684290
+updatedAt: 2025-05-29T16:44:54.763799100
 workspaceId: wk_eovdddZRuv
 folderId: fl_T2ct9HejfL
 authentication: {}
 authenticationType: null
-body: {}
-bodyType: null
+body:
+  text: |-
+    {
+      "username": "magalorfw"
+    }
+bodyType: application/json
 description: ''
-headers: []
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: SeRfrq0BbY
 method: PUT
 name: /users/me
 sortPriority: 1000.0
