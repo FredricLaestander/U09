@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_wxztqikCYL
 createdAt: 2025-05-26T12:00:18.137587
-updatedAt: 2025-05-28T12:26:27.731798
+updatedAt: 2025-05-29T11:07:00.367342300
 workspaceId: wk_eovdddZRuv
 folderId: fl_Xz2CTzHsmm
 authentication: {}
@@ -18,9 +18,9 @@ url: ${[ BASE_URL ]}/auth/google/callback
 urlParameters:
   - enabled: true
     name: code
-    value: ''
+    value: 4/0AUJR-x6zKJUzDlpx1rqUSMzudXPjJUwS7UTVDOpGIYN-JUmIpOJ5IINfzW3U2Ig01JrCMw
     id: 76nQRBt85T
   - enabled: true
     name: ''
     value: ''
-    id: dIp0tK8snU
+    id: EcKBAB7vIY
