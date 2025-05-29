@@ -10,11 +10,22 @@
 
   --color-red-lighter: #ff895c;
   --color-red: #ff500d;
-  --color-red-darker: #c23600;
+  --color-red-darker: #d63c00;
 
   --color-yellow: #ffd93b;
   --color-yellow-darker: #ffd00a;
 
   --color-green: #8de767;
-  --color-green-darker: #6dda3e;
+  --color-green-darker: #5dd629;
+}
+
+@layer base {
+  * {
+    @apply outline-offset-1 outline-blue;
+  }
+
+  *:focus,
+  *:focus-visible {
+    @apply outline-1;
+  }
 }
