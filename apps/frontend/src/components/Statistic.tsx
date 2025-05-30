@@ -1,10 +1,11 @@
+import type { Illustration as TIllustration } from '../types'
 import { Illustration } from './Illustration'
 
 export const Statistic = ({
   illustration,
   value,
 }: {
-  illustration: 'fire' | 'crown' | 'cloud'
+  illustration: TIllustration
   value: string
 }) => {
   return (
