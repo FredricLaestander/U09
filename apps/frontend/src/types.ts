@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef, ElementType } from 'react'
 
 export type Suit = 'heart' | 'diamond' | 'club' | 'spade'
 export type Face = 'jack' | 'queen' | 'king'
+export type Illustration = 'fire' | 'crown' | 'cloud'
 
 type Merge<T, U> = Omit<T, keyof U> & U
 
