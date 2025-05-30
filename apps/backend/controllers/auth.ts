@@ -67,7 +67,7 @@ const hashToken = (token: string) => {
 
 const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
   const accessToken = jwt.sign(
-    { id, jit: Bun.randomUUIDv7() },
+    { id, jwtid: Bun.randomUUIDv7() },
     process.env.ACCESS_TOKEN_SECRET!,
     {
       expiresIn: '15m',
@@ -75,7 +75,7 @@ const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
   )
 
   const refreshToken = jwt.sign(
-    { id, jit: Bun.randomUUIDv7() },
+    { id, jwtid: Bun.randomUUIDv7() },
     process.env.REFRESH_TOKEN_SECRET!,
     {
       expiresIn: '7d',
