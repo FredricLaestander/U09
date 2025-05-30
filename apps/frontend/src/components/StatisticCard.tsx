@@ -1,5 +1,5 @@
 import type { Illustration as TIllustration } from '../types'
-import { Statistic } from './statistic'
+import { Statistic } from './Statistic'
 
 export const StatisticCard = ({
   name,
