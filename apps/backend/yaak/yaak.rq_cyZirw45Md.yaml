@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_cyZirw45Md
+createdAt: 2025-05-29T11:26:06.080428
+updatedAt: 2025-05-29T11:26:38.932367
+workspaceId: wk_eovdddZRuv
+folderId: fl_Xz2CTzHsmm
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: /auth/refresh-token
+sortPriority: 0.001
+url: ${[ BASE_URL ]}/auth/refresh-token
+urlParameters: []
