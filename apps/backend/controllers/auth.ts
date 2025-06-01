@@ -98,7 +98,7 @@ const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   })
 
-  res.status(200).send()
+  res.status(200).json({ message: 'token cookies have been set' })
 }
 
 const refreshToken = handle(async ({ req, res }) => {
