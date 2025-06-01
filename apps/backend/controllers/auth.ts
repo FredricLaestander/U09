@@ -102,7 +102,16 @@ const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
 }
 
 const refreshToken = handle(async ({ req, res }) => {
-  const refreshToken = validate(req.cookies['refresh-token'], z.string())
+  const refreshToken = validate(
+    req.cookies['refresh-token'],
+    z.string(),
+    'return',
+  )
+
+  if (!refreshToken) {
+    throw new AuthError('refresh token missing', 401)
+  }
+
   const tokenHash = hashToken(refreshToken)
 
   if (
