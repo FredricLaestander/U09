@@ -37,7 +37,17 @@ const update = handle(
   { authenticate: true },
 )
 
+const deleteUser = handle(
+  async ({ res, userId }) => {
+    await prisma.user.delete({ where: { id: userId } })
+
+    res.status(200).json({ message: 'user deleted' })
+  },
+  { authenticate: true },
+)
+
 export const user = {
   getMe,
   update,
+  delete: deleteUser,
 }

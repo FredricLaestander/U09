@@ -13,9 +13,7 @@ auth.delete('/log-out', (_, res) => {
 const users = Router()
 users.get('/me', user.getMe)
 users.put('/me', user.update)
-users.delete('/me', (_, res) => {
-  res.send('delete me')
-})
+users.delete('/me', user.delete)
 
 const statistics = Router()
 statistics.put('/', (_, res) => {
