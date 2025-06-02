@@ -1,13 +1,12 @@
 import { createBrowserRouter } from 'react-router'
 import { Layout } from './layout'
+import { AuthenticatePage } from './pages/Authenticate'
 import { EditProfilePage } from './pages/EditProfile'
 import { GamePage } from './pages/Game'
 import { LandingPage } from './pages/Landing'
-import { LogInPage } from './pages/LogIn'
 import { MainMenuPage } from './pages/MainMenu'
 import { PersonalizeAccountPage } from './pages/PersonalizeAccount'
 import { ProfilePage } from './pages/Profile'
-import { RegisterPage } from './pages/Register'
 
 export const router = createBrowserRouter([
   {
@@ -35,16 +34,12 @@ export const router = createBrowserRouter([
         element: <EditProfilePage />,
       },
       {
-        path: '/register',
-        element: <RegisterPage />,
+        path: '/authenticate',
+        element: <AuthenticatePage />,
       },
       {
         path: '/personalize-account',
         element: <PersonalizeAccountPage />,
-      },
-      {
-        path: '/log-in',
-        element: <LogInPage />,
       },
     ],
   },
