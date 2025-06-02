@@ -1,4 +1,5 @@
 import { createContext, use, useState, type ReactNode } from 'react'
+import { Modals } from '../components/modals/Modals'
 
 export type ModalType = 'game-menu' | 'game-over'
 
@@ -24,6 +25,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
+      <Modals />
     </ModalContext.Provider>
   )
 }
