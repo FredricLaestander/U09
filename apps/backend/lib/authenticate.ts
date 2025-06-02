@@ -6,7 +6,7 @@ import { AuthError } from './error'
 import { validate } from './validate'
 
 export const authenticate = async (cookies: Request['cookies']) => {
-  const accessToken = validate(cookies['access-token'], z.string())
+  const accessToken = validate(cookies['access-token'], z.string(), 'return')
 
   if (!accessToken) {
     throw new AuthError('access token missing', 401)
