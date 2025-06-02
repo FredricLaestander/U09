@@ -5,7 +5,7 @@ import { Logo } from '../components/Logo'
 
 export const MainMenuPage = () => {
   return (
-    <main className="flex h-full grow flex-col items-center justify-center gap-8">
+    <main className="flex h-full grow flex-col items-center justify-center gap-8 px-4">
       <div className="flex items-center gap-4">
         <Logo text />
         <Face suit="heart" value="jack" />
