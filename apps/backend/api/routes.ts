@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { auth as authController } from '../controllers/auth'
+import { statistics as statisticsController } from '../controllers/statistics'
 import { user } from '../controllers/user'
 
 const auth = Router()
@@ -18,9 +19,7 @@ users.delete('/me', (_, res) => {
 })
 
 const statistics = Router()
-statistics.put('/', (_, res) => {
-  res.send('put statistics')
-})
+statistics.put('/', statisticsController.update)
 
 export const router = Router()
 router.use('/auth', auth)

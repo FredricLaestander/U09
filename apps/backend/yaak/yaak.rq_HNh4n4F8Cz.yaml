@@ -2,15 +2,23 @@ type: http_request
 model: http_request
 id: rq_HNh4n4F8Cz
 createdAt: 2025-05-20T13:12:55.709292
-updatedAt: 2025-05-26T12:50:16.250591
+updatedAt: 2025-06-02T07:29:50.072853
 workspaceId: wk_eovdddZRuv
 folderId: fl_Rw5LdepaS5
 authentication: {}
 authenticationType: null
-body: {}
-bodyType: null
+body:
+  text: |-
+    {
+      "outcome": "win"
+    }
+bodyType: application/json
 description: ''
-headers: []
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: qX0AQr9hfE
 method: PUT
 name: /statistics
 sortPriority: 0.0
