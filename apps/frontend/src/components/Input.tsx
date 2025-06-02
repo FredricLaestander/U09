@@ -3,11 +3,20 @@ import { cn } from '../utils/classname'
 
 export const Input = ({
   label,
+  error,
   ...props
-}: { label: string } & InputHTMLAttributes<HTMLInputElement>) => {
+}: {
+  label: string
+  error: string | null
+} & InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <div className="flex flex-col gap-1">
-      <div className="relative flex w-full items-center gap-2 rounded-lg border border-transparent bg-slate-600 px-4 py-2 text-slate-50 outline-none has-focus-visible:border-blue">
+      <div
+        className={cn(
+          'relative flex w-full items-center gap-2 rounded-lg border border-transparent bg-slate-600 px-4 py-2 text-slate-50 outline-none has-focus-visible:border-blue',
+          error && 'border-red',
+        )}
+      >
         <input
           {...props}
           className="peer w-full outline-0 placeholder:text-transparent"
@@ -23,6 +32,7 @@ export const Input = ({
           {label}
         </label>
       </div>
+      {error && <span className="text-sm text-red">{error}</span>}
     </div>
   )
 }
