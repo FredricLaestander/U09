@@ -5,10 +5,12 @@ export const Suit = ({
   variant,
   size,
   face = false,
+  classname,
 }: {
   variant: TSuit
   size: 'sm' | 'md' | 'lg'
   face?: boolean
+  classname?: string
 }) => {
   return (
     <img
@@ -18,6 +20,7 @@ export const Suit = ({
         size === 'sm' && 'w-full max-w-4',
         size === 'md' && 'w-full max-w-6',
         size === 'lg' && 'w-full max-w-16',
+        classname,
       )}
     />
   )
