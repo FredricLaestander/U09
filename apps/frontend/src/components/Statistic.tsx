@@ -1,4 +1,4 @@
-import type { Illustration as TIllustration } from '../types'
+import type { Illustration as TIllustration } from '../types/utils'
 import { Illustration } from './Illustration'
 
 export const Statistic = ({

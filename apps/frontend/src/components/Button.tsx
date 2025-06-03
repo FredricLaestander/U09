@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import type { LucideIcon } from 'lucide-react'
 import type { ElementType } from 'react'
-import type { Polymorphic } from '../types'
+import type { Polymorphic } from '../types/utils'
 import { cn } from '../utils/classname'
 
 const variants = cva(

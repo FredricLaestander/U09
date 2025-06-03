@@ -1,4 +1,4 @@
-import type { Illustration as TIllustration } from '../types'
+import type { Illustration as TIllustration } from '../types/utils'
 
 export const Illustration = ({ variant }: { variant: TIllustration }) => {
   return (
