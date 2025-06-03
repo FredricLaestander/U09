@@ -9,6 +9,10 @@ const getMe = handle(
       where: {
         id: userId,
       },
+      select: {
+        username: true,
+        statistics: true,
+      },
     })
 
     res.status(200).json(user)
