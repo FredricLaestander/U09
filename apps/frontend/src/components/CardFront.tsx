@@ -23,7 +23,8 @@ export const CardFront = ({
   suit,
   value,
   scale = '100',
-}: Card & { scale?: Scale }) => {
+  classname,
+}: Card & { scale?: Scale; classname?: string }) => {
   const color = colorMap[suit]
 
   return (
@@ -34,6 +35,7 @@ export const CardFront = ({
         scale === '90' && 'p w-36 rounded-xl p-2.5',
         scale === '80' && 'w-32 rounded-lg p-2',
         scale === '70' && 'w-28 rounded-lg p-2',
+        classname,
       )}
     >
       <Symbol

@@ -2,8 +2,10 @@ import { cn } from '../utils/classname'
 
 export const CardBack = ({
   scale = '100',
+  classname,
 }: {
   scale?: '100' | '90' | '80' | '70'
+  classname?: string
 }) => {
   return (
     <div
@@ -13,6 +15,7 @@ export const CardBack = ({
         scale === '90' && 'w-36 rounded-xl p-1.5',
         scale === '80' && 'w-32 rounded-lg p-1.5',
         scale === '70' && 'w-25 rounded-lg p-1.25',
+        classname,
       )}
     >
       <img
