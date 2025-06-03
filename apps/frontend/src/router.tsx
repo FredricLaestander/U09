@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router'
+import { Protected } from './components/Protected'
 import { Layout } from './layout'
 import { AuthenticatePage } from './pages/Authenticate'
 import { EditProfilePage } from './pages/EditProfile'
@@ -19,19 +20,35 @@ export const router = createBrowserRouter([
       },
       {
         path: '/',
-        element: <MainMenuPage />,
+        element: (
+          <Protected>
+            <MainMenuPage />
+          </Protected>
+        ),
       },
       {
         path: '/game',
-        element: <GamePage />,
+        element: (
+          <Protected>
+            <GamePage />
+          </Protected>
+        ),
       },
       {
         path: '/profile',
-        element: <ProfilePage />,
+        element: (
+          <Protected>
+            <ProfilePage />
+          </Protected>
+        ),
       },
       {
         path: '/edit-profile',
-        element: <EditProfilePage />,
+        element: (
+          <Protected>
+            <EditProfilePage />
+          </Protected>
+        ),
       },
       {
         path: '/authenticate',
