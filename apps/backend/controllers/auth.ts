@@ -18,8 +18,6 @@ const googleRedirect = handle(({ res }) => {
   res.redirect(url)
 })
 
-const authenticateUrl = `${process.env.FRONTEND_URL}/authenticate`
-
 const googleCallback = handle(async ({ req, res }) => {
   try {
     const code = validate(req.query.code, z.string())
@@ -43,12 +41,12 @@ const googleCallback = handle(async ({ req, res }) => {
     const user = await findOrCreateUser(payload.sub)
 
     await setTokens({ id: user.id, res })
-    res.redirect(authenticateUrl)
+    res.redirect(`${process.env.FRONTEND_URL}`)
   } catch (error) {
     const message = encodeURIComponent(
       error instanceof Error ? error.message : 'authentication failed',
     )
-    res.redirect(`${authenticateUrl}?error=${message}`)
+    res.redirect(`${process.env.FRONTEND_URL}/authenticate?error=${message}`)
   }
 })
 
