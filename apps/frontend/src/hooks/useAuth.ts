@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { backend } from '../lib/clients/backend'
+import { getUser } from '../lib/requests'
 import type { User } from '../types/data'
 
 export const useAuth = () => {
@@ -14,13 +14,4 @@ export const useAuth = () => {
   }, [])
 
   return { user, isLoading }
-}
-
-const getUser = async () => {
-  try {
-    const response = await backend.get<User>('/users/me')
-    return response.data
-  } catch {
-    return null
-  }
 }
