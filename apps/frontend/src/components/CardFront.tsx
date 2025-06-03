@@ -5,7 +5,7 @@ import { Suit } from './Suit'
 
 type Number = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10'
 type Value = Number | 'J' | 'Q' | 'K' | 'A'
-type Scale = '100' | '90' | '80' | '70'
+type Size = 'sm' | 'md'
 
 type Card = {
   suit: TSuit
@@ -22,19 +22,17 @@ const colorMap: Record<TSuit, string> = {
 export const CardFront = ({
   suit,
   value,
-  scale = '100',
+  size,
   classname,
-}: Card & { scale?: Scale; classname?: string }) => {
+}: Card & { size: Size; classname?: string }) => {
   const color = colorMap[suit]
 
   return (
     <div
       className={cn(
         'flex aspect-[2/3] shrink-0 flex-col items-center justify-between overflow-hidden bg-slate-50 shadow-lg',
-        scale === '100' && 'w-40 rounded-xl p-3',
-        scale === '90' && 'p w-36 rounded-xl p-2.5',
-        scale === '80' && 'w-32 rounded-lg p-2',
-        scale === '70' && 'w-28 rounded-lg p-2',
+        size === 'md' && 'w-32 rounded-lg p-2 md:w-40 md:rounded-xl md:p-3',
+        size === 'sm' && 'w-28 rounded-lg p-2 md:w-36 md:rounded-xl md:p-2.5',
         classname,
       )}
     >
@@ -43,15 +41,15 @@ export const CardFront = ({
         value={value}
         color={color}
         direction="up"
-        scale={scale}
+        size={size}
       />
-      <Art suit={suit} value={value} scale={scale} />
+      <Art suit={suit} value={value} size={size} />
       <Symbol
         suit={suit}
         value={value}
         color={color}
         direction="down"
-        scale={scale}
+        size={size}
       />
     </div>
   )
@@ -62,8 +60,8 @@ const Symbol = ({
   value,
   color,
   direction,
-  scale,
-}: Card & { color: string; direction: 'up' | 'down'; scale: Scale }) => {
+  size,
+}: Card & { color: string; direction: 'up' | 'down'; size: Size }) => {
   return (
     <div
       className={cn(
@@ -75,25 +73,14 @@ const Symbol = ({
       <span
         className={cn(
           'font-black',
-          scale === '100' && 'text-lg/tight',
-          scale === '90' && 'text-base/tight',
-          scale === '80' && 'text-sm/tight',
-          scale === '70' && 'text-xs/tight',
+          size === 'md' && 'text-sm/tight md:text-lg/tight',
+          size === 'sm' && 'text-xs/tight md:text-base/tight',
           color,
         )}
       >
         {value}
       </span>
-      <Suit
-        variant={suit}
-        size="sm"
-        classname={cn(
-          scale === '100' && 'w-4',
-          scale === '90' && 'w-4',
-          scale === '80' && 'w-3',
-          scale === '70' && 'w-3',
-        )}
-      />
+      <Suit variant={suit} size="sm" classname="w-3 md:w-4" />
     </div>
   )
 }
@@ -174,14 +161,13 @@ const getFace = ({ suit, value, classname }: Card & { classname: string }) => {
   }
 }
 
-const Art = ({ suit, value, scale }: Card & { scale: Scale }) => {
+const Art = ({ suit, value, size }: Card & { size: Size }) => {
   const number = Number(value)
 
   if (isNaN(number)) {
     const classname = cn(
-      scale === '90' && 'w-18',
-      scale === '80' && 'w-16',
-      scale === '70' && 'w-14',
+      size === 'md' && 'w-16 md:w-full',
+      size === 'sm' && 'w-14 md:w-18',
     )
 
     return (

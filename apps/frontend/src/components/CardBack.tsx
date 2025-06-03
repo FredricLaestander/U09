@@ -1,32 +1,26 @@
 import { cn } from '../utils/classname'
 
 export const CardBack = ({
-  scale = '100',
+  size,
   classname,
 }: {
-  scale?: '100' | '90' | '80' | '70'
+  size: 'sm' | 'md'
   classname?: string
 }) => {
   return (
     <div
       className={cn(
-        'aspect-[2/3] bg-slate-50 shadow-lg',
-        scale === '100' && 'w-40 rounded-xl p-2',
-        scale === '90' && 'w-36 rounded-xl p-1.5',
-        scale === '80' && 'w-32 rounded-lg p-1.5',
-        scale === '70' && 'w-25 rounded-lg p-1.25',
+        'aspect-[2/3] shrink-0 bg-slate-50 shadow-lg',
+        size === 'md' && 'w-32 rounded-lg p-1.5 md:w-40 md:rounded-xl md:p-2',
+        size === 'sm' &&
+          'w-28 rounded-lg p-1.25 md:w-36 md:rounded-xl md:p-1.5',
         classname,
       )}
     >
       <img
         src="/pattern.jpg"
         alt="card back"
-        className={cn(
-          scale === '100' && 'rounded-sm',
-          scale === '90' && 'rounded-sm',
-          scale === '80' && 'rounded-xs',
-          scale === '70' && 'rounded-xs',
-        )}
+        className="rounded-xs md:rounded-sm"
       />
     </div>
   )
