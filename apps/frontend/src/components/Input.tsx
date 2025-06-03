@@ -19,8 +19,10 @@ export const Input = ({
       >
         <input
           {...props}
+          placeholder={label}
           className="peer w-full outline-0 placeholder:text-transparent"
         />
+
         <label
           htmlFor={props.id}
           className={cn(
