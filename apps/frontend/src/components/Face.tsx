@@ -1,4 +1,4 @@
-import type { Suit, Face as TFace } from '../types'
+import type { Suit, Face as TFace } from '../types/utils'
 
 export const Face = ({
   suit,

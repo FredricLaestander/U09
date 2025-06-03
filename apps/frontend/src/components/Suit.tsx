@@ -1,4 +1,4 @@
-import type { Suit as TSuit } from '../types'
+import type { Suit as TSuit } from '../types/utils'
 import { cn } from '../utils/classname'
 
 export const Suit = ({
