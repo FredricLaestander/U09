@@ -19,27 +19,35 @@ const googleRedirect = handle(({ res }) => {
 })
 
 const googleCallback = handle(async ({ req, res }) => {
-  const code = validate(req.query.code, z.string())
+  try {
+    const code = validate(req.query.code, z.string())
 
-  const { tokens } = await googleAuthClient.getToken(code)
-  googleAuthClient.setCredentials(tokens)
+    const { tokens } = await googleAuthClient.getToken(code)
+    googleAuthClient.setCredentials(tokens)
 
-  if (!tokens.id_token) {
-    throw new AuthError('missing id_token', 401)
+    if (!tokens.id_token) {
+      throw new AuthError('missing id_token', 401)
+    }
+
+    const ticket = await googleAuthClient.verifyIdToken({
+      idToken: tokens.id_token,
+    })
+    const payload = ticket.getPayload()
+
+    if (!payload) {
+      throw new AuthError('missing payload', 401)
+    }
+
+    const user = await findOrCreateUser(payload.sub)
+
+    await setTokens({ id: user.id, res })
+    res.redirect(`${process.env.FRONTEND_URL}`)
+  } catch (error) {
+    const message = encodeURIComponent(
+      error instanceof Error ? error.message : 'authentication failed',
+    )
+    res.redirect(`${process.env.FRONTEND_URL}/authenticate?error=${message}`)
   }
-
-  const ticket = await googleAuthClient.verifyIdToken({
-    idToken: tokens.id_token,
-  })
-  const payload = ticket.getPayload()
-
-  if (!payload) {
-    throw new AuthError('missing payload', 401)
-  }
-
-  const user = await findOrCreateUser(payload.sub)
-
-  await tokenResponse({ id: user.id, res })
 })
 
 const findOrCreateUser = async (sub: string) => {
@@ -77,7 +85,7 @@ const refreshTokenOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 }
 
-const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
+const setTokens = async ({ id, res }: { id: string; res: Response }) => {
   const accessToken = jwt.sign(
     { id, jwtid: Bun.randomUUIDv7() },
     process.env.ACCESS_TOKEN_SECRET!,
@@ -101,8 +109,6 @@ const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
 
   res.cookie('access-token', accessToken, accessTokenOptions)
   res.cookie('refresh-token', refreshToken, refreshTokenOptions)
-
-  res.status(200).json({ message: 'token cookies have been set' })
 }
 
 const refreshToken = handle(async ({ req, res }) => {
@@ -140,7 +146,9 @@ const refreshToken = handle(async ({ req, res }) => {
   const { id } = validate(decodedToken, z.object({ id: z.string() }))
 
   await prisma.refreshToken.delete({ where: { tokenHash } })
-  await tokenResponse({ id, res })
+
+  await setTokens({ id, res })
+  res.status(200).json({ message: 'token cookies have been set' })
 })
 
 const logOut = handle(
