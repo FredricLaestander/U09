@@ -23,6 +23,7 @@ type Statistics {
   longestStreak Int @default(0)
   wins          Int @default(0)
   losses        Int @default(0)
+  ties          Int @default(0)
 }
 
 model RefreshToken {
