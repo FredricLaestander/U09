@@ -6,9 +6,7 @@ const auth = Router()
 auth.get('/google', authController.google.redirect)
 auth.get('/google/callback', authController.google.callback)
 auth.get('/refresh-token', authController.refreshToken)
-auth.delete('/log-out', (_, res) => {
-  res.send('delete log out')
-})
+auth.delete('/log-out', authController.logOut)
 
 const users = Router()
 users.get('/me', user.getMe)

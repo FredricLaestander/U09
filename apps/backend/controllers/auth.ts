@@ -65,6 +65,18 @@ const hashToken = (token: string) => {
   return hasher.digest('hex')
 }
 
+const accessTokenOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  maxAge: 15 * 60 * 1000, // 15 minutes
+}
+
+const refreshTokenOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+}
+
 const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
   const accessToken = jwt.sign(
     { id, jwtid: Bun.randomUUIDv7() },
@@ -87,16 +99,8 @@ const tokenResponse = async ({ id, res }: { id: string; res: Response }) => {
     data: { tokenHash: hashedRefreshToken, userId: id },
   })
 
-  res.cookie('access-token', accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 15 * 60 * 1000, // 15 minutes
-  })
-  res.cookie('refresh-token', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  })
+  res.cookie('access-token', accessToken, accessTokenOptions)
+  res.cookie('refresh-token', refreshToken, refreshTokenOptions)
 
   res.status(200).json({ message: 'token cookies have been set' })
 }
@@ -139,10 +143,32 @@ const refreshToken = handle(async ({ req, res }) => {
   await tokenResponse({ id, res })
 })
 
+const logOut = handle(
+  async ({ req, res }) => {
+    const rawToken = validate(
+      req.cookies['refresh-token'],
+      z.string(),
+      'return',
+    )
+
+    if (rawToken) {
+      const tokenHash = hashToken(rawToken)
+      await prisma.refreshToken.delete({ where: { tokenHash } })
+    }
+
+    res.clearCookie('access-token', accessTokenOptions)
+    res.clearCookie('refresh-token', refreshTokenOptions)
+
+    res.status(200).json({ message: 'user logged out' })
+  },
+  { authenticate: true },
+)
+
 export const auth = {
   google: {
     redirect: googleRedirect,
     callback: googleCallback,
   },
   refreshToken,
+  logOut,
 }
