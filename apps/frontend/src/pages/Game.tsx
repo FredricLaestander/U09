@@ -47,7 +47,7 @@ export const GamePage = () => {
         <Button
           variant="blue"
           size="sm"
-          className="self-end md:absolute md:left-[calc(100%_+_0.75rem)]"
+          className="top-1/2 -translate-y-1/2 self-end md:absolute md:left-[calc(100%_+_0.75rem)]"
         >
           Split
         </Button>
