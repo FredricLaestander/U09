@@ -1,7 +1,8 @@
+import type { ReactNode } from 'react'
 import { Navigate } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
 
-export const PersonalizeAccountPage = () => {
+export const Protected = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useAuth()
 
   if (isLoading) {
@@ -13,9 +14,9 @@ export const PersonalizeAccountPage = () => {
     return <Navigate to="/landing" />
   }
 
-  if (user.username) {
-    return <Navigate to="/" />
+  if (!user.username) {
+    return <Navigate to="/personalize-account" />
   }
 
-  return <div>Personalize account page</div>
+  return children
 }
