@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { isAxiosError } from 'axios'
 import type { User } from '../types/data'
 import { backend } from './clients/backend'
 
@@ -27,5 +27,17 @@ export const getUser = async () => {
     return response.data
   } catch {
     return null
+  }
+}
+
+export const updateUsername = async (username: string) => {
+  try {
+    await backend.put('/users/me', { username })
+    return { success: true }
+  } catch (error) {
+    const message = isAxiosError(error)
+      ? error.response?.data.message
+      : 'something went wrong when updating the username'
+    return { success: false, error: message }
   }
 }
