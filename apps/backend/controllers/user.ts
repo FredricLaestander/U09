@@ -11,6 +11,7 @@ const getMe = handle(
       },
       select: {
         username: true,
+        givenName: true,
         statistics: true,
       },
     })
