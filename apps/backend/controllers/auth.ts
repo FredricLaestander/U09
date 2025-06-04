@@ -1,5 +1,5 @@
 import type { Response } from 'express'
-import { OAuth2Client } from 'google-auth-library'
+import { OAuth2Client, type TokenPayload } from 'google-auth-library'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'
 import { AuthError } from '../lib/error'
@@ -14,7 +14,9 @@ const googleAuthClient = new OAuth2Client({
 })
 
 const googleRedirect = handle(({ res }) => {
-  const url = googleAuthClient.generateAuthUrl({ scope: 'openid' })
+  const url = googleAuthClient.generateAuthUrl({
+    scope: ['openid', 'profile'],
+  })
   res.redirect(url)
 })
 
@@ -38,7 +40,7 @@ const googleCallback = handle(async ({ req, res }) => {
       throw new AuthError('missing payload', 401)
     }
 
-    const user = await findOrCreateUser(payload.sub)
+    const user = await findOrCreateUser(payload)
 
     await setTokens({ id: user.id, res })
     res.redirect(`${process.env.FRONTEND_URL}`)
@@ -50,9 +52,9 @@ const googleCallback = handle(async ({ req, res }) => {
   }
 })
 
-const findOrCreateUser = async (sub: string) => {
+const findOrCreateUser = async (payload: TokenPayload) => {
   const user = await prisma.user.findUnique({
-    where: { googleSub: sub },
+    where: { googleSub: payload.sub },
   })
 
   if (user) {
@@ -61,7 +63,8 @@ const findOrCreateUser = async (sub: string) => {
 
   return await prisma.user.create({
     data: {
-      googleSub: sub,
+      googleSub: payload.sub,
+      givenName: payload.given_name,
       statistics: {},
     },
   })
