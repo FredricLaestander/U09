@@ -6,7 +6,7 @@ export const BackButton = () => {
   const navigate = useNavigate()
 
   return (
-    <Button onClick={() => navigate(-1)} icon={MoveLeft}>
+    <Button onClick={() => navigate(-1)} icon={MoveLeft} size="sm">
       Back
     </Button>
   )
