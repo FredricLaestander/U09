@@ -1,17 +1,19 @@
 import { Link } from 'react-router'
 import { Button } from '../components/Button'
 import { Face } from '../components/Face'
+import { Header } from '../components/Header'
 import { Logo } from '../components/Logo'
 
 export const LandingPage = () => {
   return (
     <>
-      <header className="fixed flex w-full items-center justify-between px-4 py-6 md:px-8 md:py-8">
+      <Header>
         <Logo />
         <Button as={Link} to="/authenticate">
           Log in
         </Button>
-      </header>
+      </Header>
+
       <main className="flex w-full grow flex-col items-center justify-center">
         <img
           src="/landing-background.svg"
