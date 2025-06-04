@@ -7,7 +7,7 @@ import { Statistic } from '../components/Statistic'
 
 export const GamePage = () => {
   return (
-    <main className="flex w-full grow flex-col items-center px-4 pt-6 pb-8 md:p-8">
+    <main className="flex w-full grow flex-col items-center px-4 pt-6 pb-4 md:p-8">
       <header className="absolute inset-x-0 flex items-center justify-between px-4 md:px-8">
         <Button size="sm">Menu</Button>
         <Statistic illustration="fire" value="3" />
