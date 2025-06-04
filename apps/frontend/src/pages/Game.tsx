@@ -8,13 +8,13 @@ import { Statistic } from '../components/Statistic'
 export const GamePage = () => {
   return (
     <main className="flex w-full grow flex-col items-center px-4 pt-6 pb-8 md:p-8">
-      <header className="absolute inset-x-0 flex items-center justify-between px-8">
+      <header className="absolute inset-x-0 flex items-center justify-between px-4 md:px-8">
         <Button size="sm">Menu</Button>
         <Statistic illustration="fire" value="3" />
       </header>
 
       <div className="flex grow flex-col items-center justify-between">
-        <section className="flex flex-col items-center gap-4 pt-[12vh] md:pt-0">
+        <section className="flex flex-col items-center gap-4 pt-[8vh] md:pt-0">
           <div className="flex gap-3">
             <CardFront suit="diamond" value="J" size="sm" />
             <CardBack size="sm" />
@@ -23,7 +23,7 @@ export const GamePage = () => {
           <Count value="10" />
         </section>
 
-        <section className="relative grid grid-cols-[min-content_4rem_min-content] pb-8 md:pb-0">
+        <section className="relative grid grid-cols-[min-content_4rem_min-content] pb-6 md:pb-0">
           <CardFront
             suit="diamond"
             value="A"
