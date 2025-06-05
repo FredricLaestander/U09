@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { BackButton } from '../components/BackButton'
 import { Button } from '../components/Button'
+import { Header } from '../components/Header'
 import { StatisticCard } from '../components/StatisticCard'
 import { useAuth } from '../hooks/useAuth'
 
@@ -15,9 +16,9 @@ export const ProfilePage = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 px-4 py-6 md:p-8">
+      <Header>
         <BackButton />
-      </header>
+      </Header>
       <main className="flex w-full max-w-3xl grow flex-col gap-12 px-4 pt-40">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <h2 className="text-2xl font-black">{user.username}</h2>
