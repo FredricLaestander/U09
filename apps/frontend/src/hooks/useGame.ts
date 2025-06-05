@@ -1,19 +1,29 @@
 import { useEffect, useState } from 'react'
-import { deckOfCards } from '../lib/clients/cards'
-import type { Deck } from '../types/data'
+import { drawInitialCards } from '../lib/requests'
+// import type { Deck } from '../types/data'
+import type { Participant } from '../types/utils'
 
 export const useGame = () => {
-  const [deck, setDeck] = useState<Deck | null>(null)
+  // const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
+  const [dealer, setDealer] = useState<Participant | null>(null)
+  const [player, setPlayer] = useState<Participant | null>(null)
 
   useEffect(() => {
     const getCards = async () => {
-      const response = await deckOfCards.get<Deck>('/new/draw', {
-        params: {
-          count: '4',
-        },
-      })
-      setDeck(response.data)
+      const { success, data, error } = await drawInitialCards()
+
+      if (!success) {
+        // TODO: handle error
+        console.log(error)
+        return
+      }
+
+      // setDeck(data.deck)
+      setPlayer(data.player)
+      setDealer(data.dealer)
     }
     getCards()
   }, [])
+
+  return { player, dealer }
 }

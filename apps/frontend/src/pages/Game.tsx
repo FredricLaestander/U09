@@ -6,9 +6,11 @@ import { Count } from '../components/Count'
 import { Header } from '../components/Header'
 import { Statistic } from '../components/Statistic'
 import { useGame } from '../hooks/useGame'
+import { cn } from '../utils/classname'
 
 export const GamePage = () => {
-  useGame()
+  const { player, dealer } = useGame()
+
   return (
     <>
       <Header>
@@ -20,26 +22,34 @@ export const GamePage = () => {
         <div className="flex grow flex-col items-center justify-between pt-[12vh] md:pt-8">
           <section className="flex flex-col items-center gap-4">
             <div className="flex gap-3">
-              <CardFront suit="diamond" value="J" size="sm" />
-              <CardBack size="sm" />
+              {dealer?.cards.map(({ id, open, suit, value }) => {
+                if (open) {
+                  return (
+                    <CardFront key={id} suit={suit} value={value} size="sm" />
+                  )
+                } else {
+                  return <CardBack key={id} size="sm" />
+                }
+              })}
             </div>
 
             <Count value="10" />
           </section>
-
           <section className="relative grid grid-cols-[min-content_4rem_min-content] pb-6 md:pb-0">
-            <CardFront
-              suit="diamond"
-              value="A"
-              classname="-rotate-2 col-start-1 col-end-3 justify-self-end row-1"
-              size="md"
-            />
-            <CardFront
-              suit="club"
-              value="4"
-              classname="rotate-2 col-start-2 col-end-4 row-1"
-              size="md"
-            />
+            {player?.cards.map(({ id, suit, value }, index) => (
+              <CardFront
+                key={id}
+                suit={suit}
+                value={value}
+                // TODO: fix positioning and grid to be dynamic depending on the length of cards
+                classname={cn(
+                  index === 0 &&
+                    '-rotate-2 col-start-1 col-end-3 justify-self-end row-1',
+                  index === 1 && 'rotate-2 col-start-2 col-end-4 row-1',
+                )}
+                size="md"
+              />
+            ))}
             <Count
               value="15/5"
               classname="absolute top-4 left-[calc(100%_-_2rem)]"
