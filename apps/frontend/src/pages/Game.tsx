@@ -5,8 +5,10 @@ import { CardFront } from '../components/CardFront'
 import { Count } from '../components/Count'
 import { Header } from '../components/Header'
 import { Statistic } from '../components/Statistic'
+import { useGame } from '../hooks/useGame'
 
 export const GamePage = () => {
+  useGame()
   return (
     <>
       <Header>
