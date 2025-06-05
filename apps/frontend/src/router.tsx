@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 import { Protected } from './components/Protected'
+import { AuthProvider } from './hooks/useAuth'
 import { Layout } from './layout'
 import { AuthenticatePage } from './pages/Authenticate'
 import { EditProfilePage } from './pages/EditProfile'
@@ -56,7 +57,17 @@ export const router = createBrowserRouter([
       },
       {
         path: '/personalize-account',
-        element: <PersonalizeAccountPage />,
+        element: (
+          <AuthProvider
+            check={(user) => {
+              if (user.username) {
+                return '/'
+              }
+            }}
+          >
+            <PersonalizeAccountPage />
+          </AuthProvider>
+        ),
       },
     ],
   },

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { z } from 'zod'
 import { Button } from '../components/Button'
 import { Input } from '../components/Input'
@@ -17,23 +17,10 @@ const usernameSchema = z
 export const PersonalizeAccountPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
-  const { user, isLoading } = useAuth()
+  const { user } = useAuth()
 
   const [username, setUsername] = useState('')
   const [usernameError, setUsernameError] = useState<string | null>(null)
-
-  if (isLoading) {
-    // TODO: create a loading screen
-    return null
-  }
-
-  if (!user) {
-    return <Navigate to="/landing" />
-  }
-
-  if (user.username) {
-    return <Navigate to="/" />
-  }
 
   const validateUsername = () => {
     const { error } = usernameSchema.safeParse(username)
