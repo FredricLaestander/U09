@@ -6,15 +6,19 @@ import { Count } from '../components/Count'
 import { Header } from '../components/Header'
 import { Statistic } from '../components/Statistic'
 import { useGame } from '../hooks/useGame'
+import { useModal } from '../hooks/useModal'
 import { cn } from '../utils/classname'
 
 export const GamePage = () => {
   const { player, dealer } = useGame()
+  const { open } = useModal()
 
   return (
     <>
       <Header>
-        <Button size="sm">Menu</Button>
+        <Button onClick={() => open('game-menu')} size="sm">
+          Menu
+        </Button>
         <Statistic illustration="fire" value="3" />
       </Header>
 
