@@ -1,10 +1,8 @@
-import type { Suit as TSuit } from '../types/utils'
+import type { Number, Suit as TSuit, Value } from '../types/utils'
 import { cn } from '../utils/classname'
 import { Face } from './Face'
 import { Suit } from './Suit'
 
-type Number = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10'
-type Value = Number | 'J' | 'Q' | 'K' | 'A'
 type Size = 'sm' | 'md'
 
 type Card = {
