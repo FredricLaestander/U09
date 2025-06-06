@@ -4,8 +4,8 @@ import { drawInitialCards } from '../lib/requests'
 import type { Participant } from '../types/utils'
 
 const GameContext = createContext<{
-  dealer: Participant | null
-  player: Participant | null
+  dealer: Participant
+  player: Participant
 } | null>(null)
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
@@ -13,22 +13,30 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [dealer, setDealer] = useState<Participant | null>(null)
   const [player, setPlayer] = useState<Participant | null>(null)
 
+  const [loading, setLoading] = useState(true)
+  const isLoading = loading || !player || !dealer
+
   useEffect(() => {
-    const getCards = async () => {
-      const { success, data, error } = await drawInitialCards()
+    drawInitialCards()
+      .then(({ success, data, error }) => {
+        if (!success) {
+          // TODO: create error boundry
+          throw new Error(error)
+        }
 
-      if (!success) {
-        // TODO: handle error
-        console.log(error)
-        return
-      }
-
-      // setDeck(data.deck)
-      setPlayer(data.player)
-      setDealer(data.dealer)
-    }
-    getCards()
+        // setDeck(data.deck)
+        setPlayer(data.player)
+        setDealer(data.dealer)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
+
+  if (isLoading) {
+    // TODO: create loading screen
+    return null
+  }
 
   return (
     <GameContext.Provider
