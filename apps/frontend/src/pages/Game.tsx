@@ -5,12 +5,17 @@ import { CardFront } from '../components/CardFront'
 import { Count } from '../components/Count'
 import { Header } from '../components/Header'
 import { Statistic } from '../components/Statistic'
+import { useModal } from '../hooks/useModal'
 
 export const GamePage = () => {
+  const { open } = useModal()
+
   return (
     <>
       <Header>
-        <Button size="sm">Menu</Button>
+        <Button onClick={() => open('game-menu')} size="sm">
+          Menu
+        </Button>
         <Statistic illustration="fire" value="3" />
       </Header>
 
