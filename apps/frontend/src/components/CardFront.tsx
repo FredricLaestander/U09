@@ -166,7 +166,7 @@ const Art = ({ suit, value, size }: Card & { size: Size }) => {
 
   if (isNaN(number)) {
     const classname = cn(
-      size === 'md' && 'w-16 md:w-full',
+      size === 'md' && 'w-16 md:w-20',
       size === 'sm' && 'w-14 md:w-18',
     )
 
