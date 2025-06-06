@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 import { Protected } from './components/Protected'
+import { GameProvider } from './hooks/useGame'
 import { Layout } from './layout'
 import { AuthenticatePage } from './pages/Authenticate'
 import { EditProfilePage } from './pages/EditProfile'
@@ -30,7 +31,9 @@ export const router = createBrowserRouter([
         path: '/game',
         element: (
           <Protected>
-            <GamePage />
+            <GameProvider>
+              <GamePage />
+            </GameProvider>
           </Protected>
         ),
       },
