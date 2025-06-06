@@ -4,7 +4,11 @@ import type { Participant } from '../types/utils'
 import { backend } from './clients/backend'
 import { deckOfCards } from './clients/cards'
 
-type Response<Data> =
+type Response =
+  | { success: true; error: null }
+  | { success: false; error: string }
+
+type DataResponse<Data> =
   | { success: true; data: Data; error: null }
   | { success: false; data: null; error: string }
 
@@ -36,17 +40,17 @@ export const getUser = async () => {
   }
 }
 
-export const updateUsername = async (username: string) => {
+export const updateUsername = async (username: string): Promise<Response> => {
   try {
     await backend.put('/users/me', { username })
-    return { success: true }
+    return { success: true, error: null }
   } catch (error) {
     return handleError(error, 'Something went wrong when updating the username')
   }
 }
 
 export const drawInitialCards = async (): Promise<
-  Response<{
+  DataResponse<{
     deck: Omit<Deck, 'cards'>
     player: Participant
     dealer: Participant
