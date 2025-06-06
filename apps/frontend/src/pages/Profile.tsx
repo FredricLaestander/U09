@@ -8,12 +8,6 @@ import { useAuth } from '../hooks/useAuth'
 export const ProfilePage = () => {
   const { user, logOut } = useAuth()
 
-  // TODO: this should never happen because of the route protection
-  // check if there is a way make the types aware of this
-  if (!user) {
-    return null
-  }
-
   return (
     <>
       <Header>

@@ -6,8 +6,11 @@ export const logOut = async () => {
   try {
     await backend.delete('/auth/log-out')
     return { success: true }
-  } catch {
-    return { success: false }
+  } catch (error) {
+    const message = isAxiosError(error)
+      ? error.response?.data.message
+      : 'something went wrong when logging out'
+    return { success: false, error: message }
   }
 }
 
