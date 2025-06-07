@@ -1,4 +1,5 @@
-import { createContext, use, useState, type ReactNode } from 'react'
+import { createContext, use, useEffect, useState, type ReactNode } from 'react'
+import { useLocation } from 'react-router'
 import { Modals } from '../components/modals/Modals'
 
 export type ModalType = 'game-menu' | 'game-over'
@@ -10,18 +11,27 @@ const ModalContext = createContext<{
 } | null>(null)
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
+  const pathname = useLocation().pathname
   const [type, setType] = useState<ModalType | null>(null)
+
+  const open = (type: ModalType) => {
+    setType(type)
+  }
+
+  const close = () => {
+    setType(null)
+  }
+
+  useEffect(() => {
+    close()
+  }, [pathname])
 
   return (
     <ModalContext.Provider
       value={{
         type,
-        open: (type) => {
-          setType(type)
-        },
-        close: () => {
-          setType(null)
-        },
+        open,
+        close,
       }}
     >
       {children}
