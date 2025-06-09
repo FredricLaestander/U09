@@ -26,7 +26,7 @@ export const GamePage = () => {
         <div className="flex grow flex-col items-center justify-between pt-[12vh] md:pt-8">
           <section className="flex flex-col items-center gap-4">
             <div className="flex gap-3">
-              {dealer?.cards.map(({ id, open, suit, value }) => {
+              {dealer.cards.map(({ id, open, suit, value }) => {
                 if (open) {
                   return (
                     <CardFront key={id} suit={suit} value={value} size="sm" />
@@ -40,7 +40,7 @@ export const GamePage = () => {
             <Count value="10" />
           </section>
           <section className="relative grid grid-cols-[min-content_4rem_min-content] pb-6 md:pb-0">
-            {player?.cards.map(({ id, suit, value }, index) => (
+            {player.cards.map(({ id, suit, value }, index) => (
               <CardFront
                 key={id}
                 suit={suit}
