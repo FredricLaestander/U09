@@ -1,4 +1,5 @@
-import { createContext, use, useEffect, useState, type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { createContext, use, type ReactNode } from 'react'
 import { Navigate, useNavigate } from 'react-router'
 import { useToast } from '../components/Toaster'
 import { getUser, logOut } from '../lib/requests'
@@ -18,20 +19,12 @@ export const AuthProvider = ({
   const navigate = useNavigate()
   const toast = useToast()
 
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: user, isPending } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  })
 
-  useEffect(() => {
-    getUser()
-      .then((data) => {
-        setUser(data)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
-
-  if (isLoading) {
+  if (isPending) {
     // TODO: create a loading screen
     return null
   }
