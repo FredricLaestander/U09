@@ -7,6 +7,10 @@ export type Suit = 'heart' | 'diamond' | 'club' | 'spade'
 
 export type Participant = {
   cards: (Card & { id: string; open: boolean })[]
+  score: {
+    soft: number
+    hard: number
+  }
 }
 
 export type Face = 'jack' | 'queen' | 'king'

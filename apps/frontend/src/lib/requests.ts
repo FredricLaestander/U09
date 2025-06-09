@@ -3,6 +3,7 @@ import { deckSchema, type Deck, type User } from '../types/data'
 import type { Participant } from '../types/utils'
 import { backend } from './clients/backend'
 import { deckOfCards } from './clients/cards'
+import { calculateScore } from './score'
 
 type Response =
   | { success: true; error: null }
@@ -81,12 +82,15 @@ export const drawInitialCards = async (): Promise<
       })),
     }
 
+    const playerCards = [cards[0], cards[2]]
+    const dealerCards = [cards[1], { ...cards[3], open: false }]
+
     return {
       success: true,
       data: {
         deck,
-        player: { cards: [cards[0], cards[2]] },
-        dealer: { cards: [cards[1], { ...cards[3], open: false }] },
+        player: { cards: playerCards, score: calculateScore(playerCards) },
+        dealer: { cards: dealerCards, score: calculateScore(dealerCards) },
       },
       error: null,
     }
