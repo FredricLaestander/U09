@@ -1,10 +1,12 @@
-import type { Card } from '../types/data'
+import type { Participant } from '../types/utils'
 
-export const calculateScore = (cards: Card[]) => {
+export const calculateScore = (cards: Participant['cards']) => {
   let hard = 0
   let soft = 0
 
   for (const card of cards) {
+    if (!card.open) continue
+
     if (card.value === 'A') {
       hard += 1
       soft += 11
