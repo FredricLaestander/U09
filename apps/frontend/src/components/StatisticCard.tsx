@@ -11,7 +11,7 @@ export const StatisticCard = ({
   value: string
 }) => {
   return (
-    <div className="flex flex-col gap-2 rounded-xl bg-slate-600 p-3">
+    <div className="flex flex-1 flex-col gap-2 rounded-xl bg-slate-600 p-3">
       <p className="font-bold">{name}</p>
       <Statistic illustration={illustration} value={value} />
     </div>
