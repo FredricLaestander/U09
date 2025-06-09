@@ -5,13 +5,15 @@ import { CardFront } from '../components/CardFront'
 import { Count } from '../components/Count'
 import { Header } from '../components/Header'
 import { Statistic } from '../components/Statistic'
+import { useAuth } from '../hooks/useAuth'
 import { useGame } from '../hooks/useGame'
 import { useModal } from '../hooks/useModal'
 import { cn } from '../utils/classname'
 
 export const GamePage = () => {
-  const { player, dealer } = useGame()
+  const { user } = useAuth()
   const { open } = useModal()
+  const { player, dealer } = useGame()
 
   return (
     <>
@@ -19,7 +21,12 @@ export const GamePage = () => {
         <Button onClick={() => open('game-menu')} size="sm">
           Menu
         </Button>
-        <Statistic illustration="fire" value="3" />
+        {user.statistics.streak > 1 && (
+          <Statistic
+            illustration="fire"
+            value={String(user.statistics.streak)}
+          />
+        )}
       </Header>
 
       <main className="flex w-full grow flex-col items-center px-4 pb-4 md:pb-8">
