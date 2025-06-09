@@ -7,6 +7,7 @@ import { Header } from '../components/Header'
 import { Statistic } from '../components/Statistic'
 import { useGame } from '../hooks/useGame'
 import { useModal } from '../hooks/useModal'
+import { displayScore } from '../lib/score'
 import { cn } from '../utils/classname'
 
 export const GamePage = () => {
@@ -37,7 +38,7 @@ export const GamePage = () => {
               })}
             </div>
 
-            <Count value="10" />
+            <Count value={displayScore(dealer.score)} />
           </section>
           <section className="relative grid grid-cols-[min-content_4rem_min-content] pb-6 md:pb-0">
             {player.cards.map(({ id, suit, value }, index) => (
@@ -55,7 +56,7 @@ export const GamePage = () => {
               />
             ))}
             <Count
-              value="15/5"
+              value={displayScore(player.score)}
               classname="absolute top-4 left-[calc(100%_-_2rem)]"
             />
           </section>
