@@ -1,6 +1,5 @@
 import axios, { isAxiosError } from 'axios'
-import { deckSchema, type Deck, type User } from '../types/data'
-import type { Participant } from '../types/utils'
+import { deckSchema, type User } from '../types/data'
 import { backend } from './clients/backend'
 import { deckOfCards } from './clients/cards'
 import { calculateScore } from './score'
@@ -8,10 +7,6 @@ import { calculateScore } from './score'
 type Response =
   | { success: true; error: null }
   | { success: false; error: string }
-
-type DataResponse<Data> =
-  | { success: true; data: Data; error: null }
-  | { success: false; data: null; error: string }
 
 export const logOut = async () => {
   try {
@@ -53,49 +48,35 @@ export const updateUsername = async (username: string): Promise<Response> => {
   }
 }
 
-export const drawInitialCards = async (): Promise<
-  DataResponse<{
-    deck: Omit<Deck, 'cards'>
-    player: Participant
-    dealer: Participant
-  }>
-> => {
-  try {
-    const response = await deckOfCards.get('/new/draw', {
-      params: {
-        count: '4',
-        deck_count: '6',
-      },
-    })
+export const drawInitialCards = async () => {
+  const response = await deckOfCards.get('/new/draw', {
+    params: {
+      count: '4',
+      deck_count: '6',
+    },
+  })
 
-    const { data, success } = deckSchema.safeParse(response.data)
-    if (!success) {
-      throw new Error('deck did not pass validation')
-    }
+  const { data, success } = deckSchema.safeParse(response.data)
+  if (!success) {
+    throw new Error('deck did not pass validation')
+  }
 
-    const { cards, ...deck } = {
-      ...data,
-      cards: data.cards.map((card) => ({
-        ...card,
-        id: crypto.randomUUID(),
-        open: true,
-      })),
-    }
+  const { cards, ...deck } = {
+    ...data,
+    cards: data.cards.map((card) => ({
+      ...card,
+      id: crypto.randomUUID(),
+      open: true,
+    })),
+  }
 
-    const playerCards = [cards[0], cards[2]]
-    const dealerCards = [cards[1], { ...cards[3], open: false }]
+  const playerCards = [cards[0], cards[2]]
+  const dealerCards = [cards[1], { ...cards[3], open: false }]
 
-    return {
-      success: true,
-      data: {
-        deck,
-        player: { cards: playerCards, score: calculateScore(playerCards) },
-        dealer: { cards: dealerCards, score: calculateScore(dealerCards) },
-      },
-      error: null,
-    }
-  } catch (error) {
-    return handleError(error, 'Something went wrong when drawing the cards')
+  return {
+    deck,
+    player: { cards: playerCards, score: calculateScore(playerCards) },
+    dealer: { cards: dealerCards, score: calculateScore(dealerCards) },
   }
 }
 
