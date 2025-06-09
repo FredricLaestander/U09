@@ -61,6 +61,6 @@ export type Card = z.infer<typeof cardSchema>
 export const deckSchema = z.object({
   deck_id: z.string(),
   remaining: z.number(),
-  cards: z.array(cardSchema).length(4),
+  cards: z.array(cardSchema),
 })
 export type Deck = z.infer<typeof deckSchema>

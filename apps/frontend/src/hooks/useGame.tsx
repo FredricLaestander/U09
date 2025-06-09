@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useState, type ReactNode } from 'react'
-import { drawInitialCards } from '../lib/requests'
+import { draw, drawInitialCards } from '../lib/requests'
+import type { Deck } from '../types/data'
 // import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
 
@@ -9,10 +10,11 @@ const GameContext = createContext<{
   player: Participant
   winner: Winner
   stand: () => void
+  hit: () => void
 } | null>(null)
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  // const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
+  const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
   const [dealer, setDealer] = useState<Participant | null>(null)
   const [player, setPlayer] = useState<Participant | null>(null)
   const [winner, setWinner] = useState<Winner>(null)
@@ -20,8 +22,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const { isPending } = useQuery({
     queryKey: ['initial-cards'],
     queryFn: async () => {
-      const { dealer, player } = await drawInitialCards()
+      const { deck, dealer, player } = await drawInitialCards()
 
+      setDeck(deck)
       setDealer(dealer)
       setPlayer(player)
 
@@ -31,7 +34,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     throwOnError: true,
   })
 
-  if (isPending || !dealer || !player) {
+  if (isPending || !dealer || !player || !deck) {
     // TODO: create loading screen
     return null
   }
@@ -93,6 +96,18 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     runDealerAction()
   }
 
+  const hit = async () => {
+    const { success, data, error } = await draw(deck.deck_id)
+    if (!success) {
+      throw new Error(error)
+    }
+
+    setDeck(data.deck)
+
+    const cards = [...player.cards, data.card]
+    setPlayer((prev) => ({ ...prev, cards }))
+  }
+
   return (
     <GameContext.Provider
       value={{
@@ -100,6 +115,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         player,
         winner,
         stand,
+        hit,
       }}
     >
       {children}
