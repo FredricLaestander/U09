@@ -3,7 +3,7 @@ import { drawInitialCards } from '../lib/requests'
 // import type { Deck } from '../types/data'
 import type { Participant } from '../types/utils'
 
-type Winner = 'dealer' | 'player' | null
+type Winner = 'dealer' | 'player' | 'tie' | null
 
 const GameContext = createContext<{
   dealer: Participant
@@ -43,6 +43,41 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return null
   }
 
+  const getHighestValidScore = (score: Participant['score']) => {
+    if (score.soft < 21) {
+      return score.soft
+    }
+
+    if (score.hard < 21) {
+      return score.hard
+    }
+
+    return null
+  }
+
+  const decideWinner = () => {
+    const playerScore = getHighestValidScore(player.score)
+    const dealerScore = getHighestValidScore(dealer.score)
+
+    if (!playerScore) {
+      return setWinner('dealer')
+    }
+
+    if (!dealerScore) {
+      return setWinner('player')
+    }
+
+    if (playerScore > dealerScore) {
+      return setWinner('player')
+    }
+
+    if (dealerScore > playerScore) {
+      return setWinner('dealer')
+    }
+
+    setWinner('tie')
+  }
+
   const revealDealerCard = () => {
     const cards = dealer.cards.map((card) => ({ ...card, open: true }))
     setDealer({ ...dealer, cards })
@@ -56,7 +91,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     } else if (score.hard > 21) {
       setWinner('player')
     } else {
-      // TODO: run function to determain who wins
+      decideWinner()
     }
   }
 
