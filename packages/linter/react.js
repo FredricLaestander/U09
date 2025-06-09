@@ -1,3 +1,4 @@
+import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
@@ -19,6 +20,7 @@ export const reactConfig = defineConfig([
   pluginReact.configs.flat.recommended,
   pluginReactHooks.configs['recommended-latest'],
   pluginJsxA11y.flatConfigs.recommended,
+  pluginQuery.configs['flat/recommended'],
   {
     // turn off legacy rule that requires React to be imported in every file
     rules: {
