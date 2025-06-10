@@ -5,6 +5,7 @@ import { CardFront } from '../components/CardFront'
 import { Count } from '../components/Count'
 import { Header } from '../components/Header'
 import { GameMenu } from '../components/modals/GameMenu'
+import { GameOver } from '../components/modals/GameOver'
 import { Statistic } from '../components/Statistic'
 import { useAuth } from '../hooks/useAuth'
 import { useGame } from '../hooks/useGame'
@@ -105,6 +106,7 @@ export const GamePage = () => {
       </main>
 
       <GameMenu />
+      <GameOver />
     </>
   )
 }

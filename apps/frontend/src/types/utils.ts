@@ -12,6 +12,7 @@ export type Participant = {
     hard: number
   }
 }
+export type Winner = 'dealer' | 'player' | 'tie' | null
 
 export type Face = 'jack' | 'queen' | 'king'
 export type Illustration = 'fire' | 'crown' | 'cloud'

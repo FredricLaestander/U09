@@ -1,9 +1,7 @@
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import { drawInitialCards } from '../lib/requests'
 // import type { Deck } from '../types/data'
-import type { Participant } from '../types/utils'
-
-type Winner = 'dealer' | 'player' | 'tie' | null
+import type { Participant, Winner } from '../types/utils'
 
 const GameContext = createContext<{
   dealer: Participant

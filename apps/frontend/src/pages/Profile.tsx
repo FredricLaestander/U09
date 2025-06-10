@@ -23,7 +23,7 @@ export const ProfilePage = () => {
             </Button>
           </div>
         </div>
-        <div className="flex flex-col gap-2 md:flex-row md:gap-6 md:*:flex-1">
+        <div className="flex flex-col gap-2 md:flex-row md:gap-6">
           <StatisticCard
             name="Longest streak"
             illustration="fire"
