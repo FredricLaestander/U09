@@ -9,6 +9,13 @@ const AuthContext = createContext<{ user: User; logOut: () => void } | null>(
   null,
 )
 
+export const useUser = () => {
+  return useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  })
+}
+
 export const AuthProvider = ({
   children,
   check,
@@ -19,10 +26,7 @@ export const AuthProvider = ({
   const navigate = useNavigate()
   const toast = useToast()
 
-  const { data: user, isPending } = useQuery({
-    queryKey: ['user'],
-    queryFn: getUser,
-  })
+  const { data: user, isPending } = useUser()
 
   if (isPending) {
     // TODO: create a loading screen
