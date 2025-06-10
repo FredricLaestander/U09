@@ -11,9 +11,9 @@ import { useModal } from '../hooks/useModal'
 import { cn } from '../utils/classname'
 
 export const GamePage = () => {
+  const { player, dealer, stand } = useGame()
   const { user } = useAuth()
   const { open } = useModal()
-  const { player, dealer } = useGame()
 
   return (
     <>
@@ -81,7 +81,12 @@ export const GamePage = () => {
             <Button variant="green" icon={Plus} className="flex-1 md:w-36">
               Hit
             </Button>
-            <Button variant="red" icon={X} className="flex-1 md:w-36">
+            <Button
+              onClick={stand}
+              variant="red"
+              icon={X}
+              className="flex-1 md:w-36"
+            >
               Stand
             </Button>
           </div>

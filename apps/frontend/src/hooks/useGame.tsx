@@ -3,15 +3,20 @@ import { drawInitialCards } from '../lib/requests'
 // import type { Deck } from '../types/data'
 import type { Participant } from '../types/utils'
 
+type Winner = 'dealer' | 'player' | null
+
 const GameContext = createContext<{
   dealer: Participant
   player: Participant
+  winner: Winner
+  stand: () => void
 } | null>(null)
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   // const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
   const [dealer, setDealer] = useState<Participant | null>(null)
   const [player, setPlayer] = useState<Participant | null>(null)
+  const [winner, setWinner] = useState<Winner>(null)
 
   const [loading, setLoading] = useState(true)
   const isLoading = loading || !player || !dealer
@@ -38,11 +43,35 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return null
   }
 
+  const revealDealerCard = () => {
+    const cards = dealer.cards.map((card) => ({ ...card, open: true }))
+    setDealer({ ...dealer, cards })
+  }
+
+  const runDealerAction = () => {
+    const score = dealer.score
+
+    if (score.soft < 17) {
+      // TODO: draw new card for the dealer
+    } else if (score.hard > 21) {
+      setWinner('player')
+    } else {
+      // TODO: run function to determain who wins
+    }
+  }
+
+  const stand = () => {
+    revealDealerCard()
+    runDealerAction()
+  }
+
   return (
     <GameContext.Provider
       value={{
         dealer,
         player,
+        winner,
+        stand,
       }}
     >
       {children}
