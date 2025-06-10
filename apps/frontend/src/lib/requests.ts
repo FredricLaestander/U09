@@ -20,6 +20,10 @@ export const logOut = async () => {
   }
 }
 
+export const deleteUser = async () => {
+  await backend.delete('/users/me')
+}
+
 export const refreshTokens = async () => {
   // this needs to be it's own client to avoid an infinite loop with the interceptor
   await axios
