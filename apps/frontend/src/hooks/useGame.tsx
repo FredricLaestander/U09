@@ -1,4 +1,5 @@
-import { createContext, use, useEffect, useState, type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { createContext, use, useState, type ReactNode } from 'react'
 import { drawInitialCards } from '../lib/requests'
 // import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
@@ -16,27 +17,21 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [player, setPlayer] = useState<Participant | null>(null)
   const [winner, setWinner] = useState<Winner>(null)
 
-  const [loading, setLoading] = useState(true)
-  const isLoading = loading || !player || !dealer
+  const { isPending } = useQuery({
+    queryKey: ['initial-cards'],
+    queryFn: async () => {
+      const { dealer, player } = await drawInitialCards()
 
-  useEffect(() => {
-    drawInitialCards()
-      .then(({ success, data, error }) => {
-        if (!success) {
-          // TODO: create error boundry
-          throw new Error(error)
-        }
+      setDealer(dealer)
+      setPlayer(player)
 
-        // setDeck(data.deck)
-        setPlayer(data.player)
-        setDealer(data.dealer)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+      // a queryFn needs to return something but we won't use this
+      return { success: true }
+    },
+    throwOnError: true,
+  })
 
-  if (isLoading) {
+  if (isPending || !dealer || !player) {
     // TODO: create loading screen
     return null
   }
