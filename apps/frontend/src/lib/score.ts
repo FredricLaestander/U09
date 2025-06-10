@@ -22,6 +22,18 @@ export const calculateScore = (cards: Participant['cards']) => {
   return { hard, soft }
 }
 
+export const getHighestValidScore = (score: Participant['score']) => {
+  if (score.soft < 21) {
+    return score.soft
+  }
+
+  if (score.hard < 21) {
+    return score.hard
+  }
+
+  return null
+}
+
 export const displayScore = (score: Participant['score']) => {
   if (score.hard === score.soft) {
     return String(score.hard)

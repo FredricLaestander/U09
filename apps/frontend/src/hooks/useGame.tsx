@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useState, type ReactNode } from 'react'
 import { draw, drawInitialCards } from '../lib/requests'
-import { calculateScore } from '../lib/score'
+import { calculateScore, getHighestValidScore } from '../lib/score'
 import type { Deck } from '../types/data'
 // import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
+import { useModal } from './useModal'
 
 const GameContext = createContext<{
   dealer: Participant
@@ -15,6 +16,8 @@ const GameContext = createContext<{
 } | null>(null)
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
+  const { open } = useModal()
+
   const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
   const [dealer, setDealer] = useState<Participant | null>(null)
   const [player, setPlayer] = useState<Participant | null>(null)
@@ -40,16 +43,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return null
   }
 
-  const getHighestValidScore = (score: Participant['score']) => {
-    if (score.soft < 21) {
-      return score.soft
-    }
-
-    if (score.hard < 21) {
-      return score.hard
-    }
-
-    return null
+  const roundOver = (winner: NonNullable<Winner>) => {
+    setWinner(winner)
+    open('game-over')
   }
 
   const decideWinner = () => {
@@ -57,22 +53,22 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const dealerScore = getHighestValidScore(dealer.score)
 
     if (!playerScore) {
-      return setWinner('dealer')
+      return roundOver('dealer')
     }
 
     if (!dealerScore) {
-      return setWinner('player')
+      return roundOver('player')
     }
 
     if (playerScore > dealerScore) {
-      return setWinner('player')
+      return roundOver('player')
     }
 
     if (dealerScore > playerScore) {
-      return setWinner('dealer')
+      return roundOver('dealer')
     }
 
-    setWinner('tie')
+    roundOver('tie')
   }
 
   const revealDealerCard = () => {
@@ -86,7 +82,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     if (score.soft < 17) {
       // TODO: draw new card for the dealer
     } else if (score.hard > 21) {
-      setWinner('player')
+      roundOver('player')
     } else {
       decideWinner()
     }
