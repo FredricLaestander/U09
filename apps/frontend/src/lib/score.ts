@@ -1,4 +1,4 @@
-import type { Participant } from '../types/utils'
+import type { Participant, Winner } from '../types/utils'
 
 export const calculateScore = (cards: Participant['cards']) => {
   let hard = 0
@@ -22,16 +22,42 @@ export const calculateScore = (cards: Participant['cards']) => {
   return { hard, soft }
 }
 
-export const getHighestValidScore = (score: Participant['score']) => {
-  if (score.soft < 21) {
+const getHighestValidScore = (score: Participant['score']) => {
+  if (score.soft <= 21) {
     return score.soft
   }
 
-  if (score.hard < 21) {
+  if (score.hard <= 21) {
     return score.hard
   }
 
   return null
+}
+
+export const getWinner = (
+  dealerScore: Participant['score'],
+  playerScore: Participant['score'],
+): NonNullable<Winner> => {
+  const highestDealerScore = getHighestValidScore(dealerScore)
+  const highestPlayerScore = getHighestValidScore(playerScore)
+
+  if (!highestPlayerScore) {
+    return 'dealer'
+  }
+
+  if (!highestDealerScore) {
+    return 'player'
+  }
+
+  if (highestPlayerScore > highestDealerScore) {
+    return 'player'
+  }
+
+  if (highestDealerScore > highestPlayerScore) {
+    return 'dealer'
+  }
+
+  return 'tie'
 }
 
 export const displayScore = (score: Participant['score']) => {
