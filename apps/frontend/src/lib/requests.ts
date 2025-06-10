@@ -48,15 +48,8 @@ export const updateUsername = async (username: string): Promise<Response> => {
   }
 }
 
-export const drawInitialCards = async () => {
-  const response = await deckOfCards.get('/new/draw', {
-    params: {
-      count: '4',
-      deck_count: '6',
-    },
-  })
-
-  const { data, success } = deckSchema.safeParse(response.data)
+const formatDeck = (response: unknown) => {
+  const { data, success } = deckSchema.safeParse(response)
   if (!success) {
     throw new Error('deck did not pass validation')
   }
@@ -70,6 +63,19 @@ export const drawInitialCards = async () => {
     })),
   }
 
+  return { cards, deck }
+}
+
+export const drawInitialCards = async () => {
+  const response = await deckOfCards.get('/new/draw', {
+    params: {
+      count: '4',
+      deck_count: '6',
+    },
+  })
+
+  const { deck, cards } = formatDeck(response.data)
+
   const playerCards = [cards[0], cards[2]]
   const dealerCards = [cards[1], { ...cards[3], open: false }]
 
@@ -77,6 +83,18 @@ export const drawInitialCards = async () => {
     deck,
     player: { cards: playerCards, score: calculateScore(playerCards) },
     dealer: { cards: dealerCards, score: calculateScore(dealerCards) },
+  }
+}
+
+export const draw = async (deckId: string) => {
+  const response = await deckOfCards.get(`/${deckId}/draw`, {
+    params: { count: '1' },
+  })
+  const { deck, cards } = formatDeck(response.data)
+
+  return {
+    deck,
+    card: cards[0],
   }
 }
 

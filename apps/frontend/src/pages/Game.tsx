@@ -14,7 +14,7 @@ import { displayScore } from '../lib/score'
 import { cn } from '../utils/classname'
 
 export const GamePage = () => {
-  const { player, dealer, stand } = useGame()
+  const { player, dealer, stand, hit } = useGame()
   const { user } = useAuth()
   const { open } = useModal()
 
@@ -90,7 +90,12 @@ export const GamePage = () => {
           </Button>
 
           <div className="flex gap-3">
-            <Button variant="green" icon={Plus} className="flex-1 md:w-36">
+            <Button
+              onClick={hit}
+              variant="green"
+              icon={Plus}
+              className="flex-1 md:w-36"
+            >
               Hit
             </Button>
             <Button
