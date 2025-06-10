@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useState, type ReactNode } from 'react'
 import { draw, drawInitialCards } from '../lib/requests'
+import { calculateScore } from '../lib/score'
 import type { Deck } from '../types/data'
 // import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
@@ -97,15 +98,13 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const hit = async () => {
-    const { success, data, error } = await draw(deck.deck_id)
-    if (!success) {
-      throw new Error(error)
-    }
+    const { deck: updatedDeck, card } = await draw(deck.deck_id)
 
-    setDeck(data.deck)
+    setDeck(updatedDeck)
 
-    const cards = [...player.cards, data.card]
-    setPlayer((prev) => ({ ...prev, cards }))
+    const cards = [...player.cards, card]
+    const score = calculateScore(cards)
+    setPlayer({ cards, score })
   }
 
   return (

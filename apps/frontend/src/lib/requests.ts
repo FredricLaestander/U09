@@ -93,12 +93,8 @@ export const draw = async (deckId: string) => {
   const { deck, cards } = formatDeck(response.data)
 
   return {
-    success: true,
-    data: {
-      deck,
-      card: cards[0],
-    },
-    error: null,
+    deck,
+    card: cards[0],
   }
 }
 
