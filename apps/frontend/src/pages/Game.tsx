@@ -4,6 +4,7 @@ import { CardBack } from '../components/CardBack'
 import { CardFront } from '../components/CardFront'
 import { Count } from '../components/Count'
 import { Header } from '../components/Header'
+import { GameMenu } from '../components/modals/GameMenu'
 import { Statistic } from '../components/Statistic'
 import { useAuth } from '../hooks/useAuth'
 import { useGame } from '../hooks/useGame'
@@ -93,6 +94,8 @@ export const GamePage = () => {
           </div>
         </nav>
       </main>
+
+      <GameMenu />
     </>
   )
 }
