@@ -39,17 +39,26 @@ export const GamePage = () => {
 
             <Count value="10" />
           </section>
-          <section className="relative grid grid-cols-[min-content_4rem_min-content] pb-6 md:pb-0">
+          <section
+            style={{
+              gridTemplateColumns: Array(player.cards.length)
+                .fill('min-content')
+                .join(' '),
+            }}
+            className="relative grid pb-6 md:pb-0"
+          >
             {player.cards.map(({ id, suit, value }, index) => (
               <CardFront
                 key={id}
                 suit={suit}
                 value={value}
-                // TODO: fix positioning and grid to be dynamic depending on the length of cards
+                style={{
+                  gridColumn: `${index + 1} / ${index + 3}`,
+                }}
                 classname={cn(
-                  index === 0 &&
-                    '-rotate-2 col-start-1 col-end-3 justify-self-end row-1',
-                  index === 1 && 'rotate-2 col-start-2 col-end-4 row-1',
+                  'row-1',
+                  index % 2 === 0 && '-rotate-2',
+                  index % 2 === 1 && 'rotate-2',
                 )}
                 size="md"
               />

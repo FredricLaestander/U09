@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import type { Number, Suit as TSuit, Value } from '../types/utils'
 import { cn } from '../utils/classname'
 import { Face } from './Face'
@@ -22,7 +23,8 @@ export const CardFront = ({
   value,
   size,
   classname,
-}: Card & { size: Size; classname?: string }) => {
+  style,
+}: Card & { size: Size; classname?: string; style?: CSSProperties }) => {
   const color = colorMap[suit]
 
   return (
@@ -33,6 +35,7 @@ export const CardFront = ({
         size === 'sm' && 'w-28 rounded-lg p-2 md:w-36 md:rounded-xl md:p-2.5',
         classname,
       )}
+      style={style}
     >
       <Symbol
         suit={suit}
