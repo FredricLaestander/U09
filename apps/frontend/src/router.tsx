@@ -56,17 +56,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/authenticate',
-        element: (
-          <AuthProvider
-            check={(user) => {
-              if (user) {
-                return '/'
-              }
-            }}
-          >
-            <AuthenticatePage />
-          </AuthProvider>
-        ),
+        element: <AuthenticatePage />,
       },
       {
         path: '/personalize-account',
