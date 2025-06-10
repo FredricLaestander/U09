@@ -21,3 +21,11 @@ export const calculateScore = (cards: Participant['cards']) => {
 
   return { hard, soft }
 }
+
+export const displayScore = (score: Participant['score']) => {
+  if (score.hard === score.soft) {
+    return String(score.hard)
+  }
+
+  return `${score.soft} / ${score.hard}`
+}
