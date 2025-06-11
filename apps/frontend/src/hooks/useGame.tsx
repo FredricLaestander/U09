@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { createContext, use, useState, type ReactNode } from 'react'
+import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import { draw, drawInitialCards } from '../lib/requests'
-import { calculateScore, getHighestValidScore } from '../lib/score'
+import { calculateScore, getWinner } from '../lib/score'
 import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
+import { sleep } from '../utils/sleep'
 import { useModal } from './useModal'
 
 const GameContext = createContext<{
@@ -22,6 +23,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [dealer, setDealer] = useState<Participant | null>(null)
   const [player, setPlayer] = useState<Participant | null>(null)
   const [winner, setWinner] = useState<Winner>(null)
+  const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
 
   const start = async () => {
     const { deck, dealer, player } = await drawInitialCards()
@@ -40,59 +42,48 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     throwOnError: true,
   })
 
+  useEffect(() => {
+    if (!dealer || !player || !deck) return
+
+    if (turn === 'dealer') {
+      const run = async () => {
+        let cards = dealer.cards.map((card) => ({ ...card, open: true }))
+        let score = calculateScore(cards)
+
+        setDealer({ cards, score })
+        await sleep()
+
+        while (score.soft < 17 || (score.soft > 21 && score.hard < 17)) {
+          const { deck: updatedDeck, card } = await draw(deck.deck_id)
+          setDeck(updatedDeck)
+
+          cards = [...cards, card]
+          score = calculateScore(cards)
+
+          await sleep()
+          setDealer({ cards, score: score })
+        }
+
+        await sleep(1000)
+        setTurn('over')
+      }
+      run()
+    }
+
+    if (turn === 'over') {
+      const winner = getWinner(dealer.score, player.score)
+      setWinner(winner)
+      open('game-over')
+    }
+  }, [turn])
+
   if (isPending || !dealer || !player || !deck) {
     // TODO: create loading screen
     return null
   }
 
-  const roundOver = (winner: NonNullable<Winner>) => {
-    setWinner(winner)
-    open('game-over')
-  }
-
-  const decideWinner = () => {
-    const playerScore = getHighestValidScore(player.score)
-    const dealerScore = getHighestValidScore(dealer.score)
-
-    if (!playerScore) {
-      return roundOver('dealer')
-    }
-
-    if (!dealerScore) {
-      return roundOver('player')
-    }
-
-    if (playerScore > dealerScore) {
-      return roundOver('player')
-    }
-
-    if (dealerScore > playerScore) {
-      return roundOver('dealer')
-    }
-
-    roundOver('tie')
-  }
-
-  const revealDealerCard = () => {
-    const cards = dealer.cards.map((card) => ({ ...card, open: true }))
-    setDealer({ ...dealer, cards })
-  }
-
-  const runDealerAction = () => {
-    const score = dealer.score
-
-    if (score.soft < 17) {
-      // TODO: draw new card for the dealer
-    } else if (score.hard > 21) {
-      roundOver('player')
-    } else {
-      decideWinner()
-    }
-  }
-
-  const stand = () => {
-    revealDealerCard()
-    runDealerAction()
+  const stand = async () => {
+    setTurn('dealer')
   }
 
   const hit = async () => {
