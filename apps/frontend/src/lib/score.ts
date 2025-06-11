@@ -34,6 +34,14 @@ const getHighestValidScore = (score: Participant['score']) => {
   return null
 }
 
+export const has21 = (score: Participant['score']) => {
+  if (score.soft === 21 || score.hard === 21) {
+    return true
+  }
+
+  return false
+}
+
 export const getWinner = (
   dealerScore: Participant['score'],
   playerScore: Participant['score'],
