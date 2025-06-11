@@ -39,9 +39,9 @@ export const EditProfilePage = () => {
     <>
       <Header>
         <BackButton />
-        <h2 className="absolute w-full text-center text-2xl font-black">
+        <h1 className="w-full text-end text-2xl font-black md:absolute md:text-center">
           Edit profile
-        </h2>
+        </h1>
       </Header>
       <main className="flex w-full grow flex-col items-center px-4">
         <form
