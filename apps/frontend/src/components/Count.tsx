@@ -10,7 +10,7 @@ export const Count = ({
   return (
     <span
       className={cn(
-        'flex w-16 justify-center rounded-full bg-slate-900 px-2 py-0.5 font-bold',
+        'flex w-18 justify-center rounded-full bg-slate-900 px-2 py-0.5 font-bold whitespace-nowrap',
         classname,
       )}
     >
