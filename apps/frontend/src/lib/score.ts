@@ -1,4 +1,4 @@
-import type { Participant, Winner } from '../types/utils'
+import type { Outcome, Participant, Winner } from '../types/utils'
 
 export const calculateScore = (
   cards: Participant['cards'],
@@ -84,6 +84,12 @@ export const getWinner = (
   }
 
   return 'tie'
+}
+
+export const outcomeMap: Record<NonNullable<Winner>, Outcome> = {
+  dealer: 'loss',
+  player: 'win',
+  tie: 'tie',
 }
 
 export const displayScore = (score: Participant['score']) => {

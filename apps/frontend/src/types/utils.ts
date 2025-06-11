@@ -13,7 +13,9 @@ export type Participant = {
     cardLength: number
   }
 }
+
 export type Winner = 'dealer' | 'player' | 'tie' | null
+export type Outcome = 'win' | 'loss' | 'tie'
 
 export type Face = 'jack' | 'queen' | 'king'
 export type Illustration = 'fire' | 'crown' | 'cloud'

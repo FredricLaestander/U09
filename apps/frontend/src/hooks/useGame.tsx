@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
-import { draw, drawInitialCards } from '../lib/requests'
-import { calculateScore, getWinner, has21 } from '../lib/score'
+import { useToast } from '../components/Toaster'
+import { draw, drawInitialCards, updateStatistics } from '../lib/requests'
+import { calculateScore, getWinner, has21, outcomeMap } from '../lib/score'
 import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
 import { sleep } from '../utils/sleep'
@@ -18,6 +19,7 @@ const GameContext = createContext<{
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const { open } = useModal()
+  const toast = useToast()
 
   const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
   const [dealer, setDealer] = useState<Participant | null>(null)
@@ -45,6 +47,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       return { success: true } // a queryFn needs to return something but we won't use this
     },
     throwOnError: true,
+  })
+
+  const { mutate: handleOutcome } = useMutation({
+    mutationFn: updateStatistics,
+    onError: (error) => toast.error(error.message),
   })
 
   useEffect(() => {
@@ -78,6 +85,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     if (turn === 'over') {
       const winner = getWinner(dealer.score, player.score)
       setWinner(winner)
+      handleOutcome(outcomeMap[winner])
       open('game-over')
     }
   }, [turn])

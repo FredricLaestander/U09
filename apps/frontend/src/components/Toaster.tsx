@@ -32,7 +32,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
         {toasts.map((toast) => (
           <Toast {...toast} key={toast.id} />
         ))}
-        <Primitive.Viewport className="fixed top-12 right-4 left-4 flex flex-col gap-2 md:top-auto md:right-8 md:bottom-6 md:left-auto" />
+        <Primitive.Viewport className="fixed top-12 right-4 left-4 z-50 flex flex-col gap-2 md:top-auto md:right-8 md:bottom-6 md:left-auto" />
       </Primitive.Provider>
     </ToastContext.Provider>
   )
