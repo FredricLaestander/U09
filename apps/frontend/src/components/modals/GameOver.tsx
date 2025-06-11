@@ -2,6 +2,7 @@ import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
 import { Link } from 'react-router'
 import { useAuth } from '../../hooks/useAuth'
 import { useGame } from '../../hooks/useGame'
+import { useModal } from '../../hooks/useModal'
 import type { Winner } from '../../types/utils'
 import { Button } from '../Button'
 import { StatisticCard } from '../StatisticCard'
@@ -21,7 +22,8 @@ const getTitle = (winner: Winner) => {
 }
 
 export const GameOver = () => {
-  const { winner } = useGame()
+  const { winner, reset } = useGame()
+  const { close } = useModal()
   const { user } = useAuth()
 
   return (
@@ -54,7 +56,8 @@ export const GameOver = () => {
       <div className="mt-8 flex w-full gap-3">
         <Button
           onClick={() => {
-            // TODO: reset game
+            reset()
+            close()
           }}
           variant="blue"
           className="flex-1"

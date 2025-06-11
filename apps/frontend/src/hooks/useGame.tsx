@@ -3,7 +3,6 @@ import { createContext, use, useState, type ReactNode } from 'react'
 import { draw, drawInitialCards } from '../lib/requests'
 import { calculateScore, getHighestValidScore } from '../lib/score'
 import type { Deck } from '../types/data'
-// import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
 import { useModal } from './useModal'
 
@@ -13,6 +12,7 @@ const GameContext = createContext<{
   winner: Winner
   stand: () => void
   hit: () => void
+  reset: () => Promise<void>
 } | null>(null)
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
@@ -23,17 +23,19 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [player, setPlayer] = useState<Participant | null>(null)
   const [winner, setWinner] = useState<Winner>(null)
 
+  const start = async () => {
+    const { deck, dealer, player } = await drawInitialCards()
+
+    setDeck(deck)
+    setDealer(dealer)
+    setPlayer(player)
+  }
+
   const { isPending } = useQuery({
     queryKey: ['initial-cards'],
     queryFn: async () => {
-      const { deck, dealer, player } = await drawInitialCards()
-
-      setDeck(deck)
-      setDealer(dealer)
-      setPlayer(player)
-
-      // a queryFn needs to return something but we won't use this
-      return { success: true }
+      await start()
+      return { success: true } // a queryFn needs to return something but we won't use this
     },
     throwOnError: true,
   })
@@ -103,6 +105,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setPlayer({ cards, score })
   }
 
+  const reset = async () => {
+    setDeck(null)
+    setDealer(null)
+    setPlayer(null)
+    setWinner(null)
+    await start()
+  }
+
   return (
     <GameContext.Provider
       value={{
@@ -111,6 +121,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         winner,
         stand,
         hit,
+        reset,
       }}
     >
       {children}
