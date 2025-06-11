@@ -30,7 +30,7 @@ type Statistics {
 model RefreshToken {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   tokenHash String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())
 }
