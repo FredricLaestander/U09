@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import { draw, drawInitialCards } from '../lib/requests'
-import { calculateScore, getWinner } from '../lib/score'
+import { calculateScore, getWinner, has21 } from '../lib/score'
 import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
 import { sleep } from '../utils/sleep'
@@ -31,6 +31,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setDeck(deck)
     setDealer(dealer)
     setPlayer(player)
+
+    if (has21(player.score)) {
+      await sleep(1000)
+      setTurn('dealer')
+    }
   }
 
   const { isPending } = useQuery({
@@ -95,6 +100,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const score = calculateScore(cards)
     setPlayer({ cards, score })
 
+    if (has21(score)) {
+      await sleep(1000)
+      setTurn('dealer')
+    }
+
     if (score.hard > 21) {
       await sleep(1000)
       setTurn('over')
@@ -106,6 +116,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setDealer(null)
     setPlayer(null)
     setWinner(null)
+    setTurn('player')
     await start()
   }
 
