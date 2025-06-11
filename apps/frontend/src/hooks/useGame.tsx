@@ -94,6 +94,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const cards = [...player.cards, card]
     const score = calculateScore(cards)
     setPlayer({ cards, score })
+
+    if (score.hard > 21) {
+      await sleep(1000)
+      setTurn('over')
+    }
   }
 
   const reset = async () => {
