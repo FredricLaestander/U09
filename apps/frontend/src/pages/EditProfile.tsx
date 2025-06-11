@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 import { z } from 'zod'
 import { BackButton } from '../components/BackButton'
 import { Button } from '../components/Button'
+import { Header } from '../components/Header'
 import { Input } from '../components/Input'
 import { useToast } from '../components/Toaster'
 import { useAuth } from '../hooks/useAuth'
@@ -35,67 +36,69 @@ export const EditProfilePage = () => {
   }
 
   return (
-    <main className="flex w-full grow flex-col">
-      <div className="flex w-full">
-        {/* / backbutton  should use absolute / */}
+    <>
+      <Header>
         <BackButton />
-        <h2 className="w-full text-center text-2xl font-black">Edit profile</h2>
-      </div>
+        <h2 className="absolute w-full text-center text-2xl font-black">
+          Edit profile
+        </h2>
+      </Header>
+      <main className="flex w-full grow flex-col items-center px-4">
+        <form
+          action="submit"
+          onSubmit={async (event) => {
+            event.preventDefault()
 
-      <form
-        action="submit"
-        onSubmit={async (event) => {
-          event.preventDefault()
-
-          validateUsername()
-          if (usernameError) return
-
-          const { success, error } = await updateUsername(username)
-
-          if (success) {
-            await queryClient.invalidateQueries({ queryKey: ['user'] })
-            navigate('/profile')
-          } else {
-            toast.error(error)
-          }
-        }}
-        className="flex grow flex-col justify-between pt-40 pb-20 md:items-end"
-      >
-        <Input
-          value={username}
-          onChange={(event) => {
-            setUsername(event.target.value)
-          }}
-          onBlur={() => {
             validateUsername()
-          }}
-          label="Username"
-          error={usernameError}
-        />
-        <div className="flex">
-          <Button
-            type="button"
-            variant="red"
-            size="md"
-            onClick={async () => {
-              try {
-                await deleteUser()
-                queryClient.invalidateQueries({ queryKey: ['user'] })
-                navigate('/')
-              } catch (error) {
-                const message = isAxiosError(error)
-                  ? error.response?.data.message
-                  : 'something went wrong when logging out'
+            if (usernameError) return
 
-                toast.error(message)
-              }
+            const { success, error } = await updateUsername(username)
+
+            if (success) {
+              await queryClient.invalidateQueries({ queryKey: ['user'] })
+              navigate('/profile')
+            } else {
+              toast.error(error)
+            }
+          }}
+          className="flex w-full grow flex-col justify-between pt-40 pb-20 md:max-w-sm"
+        >
+          <Input
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value)
             }}
-          >
-            Delete account
-          </Button>
-          <Button size="md">Save</Button>
-        </div>
-      </form>
-    </main>
+            onBlur={() => {
+              validateUsername()
+            }}
+            label="Username"
+            error={usernameError}
+          />
+          <div className="flex flex-col gap-3 md:flex-row md:justify-end">
+            <Button
+              type="button"
+              variant="red"
+              size="md"
+              onClick={async () => {
+                try {
+                  await deleteUser()
+                  queryClient.invalidateQueries({ queryKey: ['user'] })
+                  navigate('/')
+                } catch (error) {
+                  const message = isAxiosError(error)
+                    ? error.response?.data.message
+                    : 'something went wrong when logging out'
+
+                  toast.error(message)
+                }
+              }}
+            >
+              Delete account
+            </Button>
+            <Button size="md">Save</Button>
+          </div>
+        </form>
+      </main>
+    </>
   )
 }
