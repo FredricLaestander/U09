@@ -1,6 +1,8 @@
 import type { Participant, Winner } from '../types/utils'
 
-export const calculateScore = (cards: Participant['cards']) => {
+export const calculateScore = (
+  cards: Participant['cards'],
+): Participant['score'] => {
   let hard = 0
   let soft = 0
 
@@ -19,7 +21,7 @@ export const calculateScore = (cards: Participant['cards']) => {
     }
   }
 
-  return { hard, soft }
+  return { hard, soft, cardLength: cards.length }
 }
 
 const getHighestValidScore = (score: Participant['score']) => {
@@ -42,12 +44,28 @@ export const has21 = (score: Participant['score']) => {
   return false
 }
 
+export const hasBlackjack = (score: Participant['score']) => {
+  if (has21(score) && score.cardLength === 2) {
+    return true
+  }
+
+  return false
+}
+
 export const getWinner = (
   dealerScore: Participant['score'],
   playerScore: Participant['score'],
 ): NonNullable<Winner> => {
   const highestDealerScore = getHighestValidScore(dealerScore)
   const highestPlayerScore = getHighestValidScore(playerScore)
+
+  if (hasBlackjack(dealerScore) && hasBlackjack(playerScore)) {
+    return 'tie'
+  }
+
+  if (hasBlackjack(playerScore)) {
+    return 'player'
+  }
 
   if (!highestPlayerScore) {
     return 'dealer'

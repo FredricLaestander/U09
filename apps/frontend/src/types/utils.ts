@@ -10,6 +10,7 @@ export type Participant = {
   score: {
     soft: number
     hard: number
+    cardLength: number
   }
 }
 export type Winner = 'dealer' | 'player' | 'tie' | null
