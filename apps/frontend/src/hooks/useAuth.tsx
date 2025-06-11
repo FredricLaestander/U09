@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, type ReactNode } from 'react'
 import { Navigate, useNavigate } from 'react-router'
+import { Loading } from '../components/Loading'
 import { useToast } from '../components/Toaster'
 import { getUser, logOut } from '../lib/requests'
 import type { User } from '../types/data'
@@ -29,8 +30,7 @@ export const AuthProvider = ({
   const { data: user, isPending } = useUser()
 
   if (isPending) {
-    // TODO: create a loading screen
-    return null
+    return <Loading />
   }
 
   if (!user) {
