@@ -87,7 +87,7 @@ export const EditProfilePage = () => {
                 } catch (error) {
                   const message = isAxiosError(error)
                     ? error.response?.data.message
-                    : 'something went wrong when logging out'
+                    : 'Something went wrong when deleting your account'
 
                   toast.error(message)
                 }
