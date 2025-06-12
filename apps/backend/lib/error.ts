@@ -45,6 +45,10 @@ export const handleError = ({
   error: unknown
   res: Response
 }) => {
+  if (error instanceof AuthError) {
+    console.log(error.message)
+  }
+
   if (
     error instanceof HandlerError ||
     error instanceof NotFoundError ||
