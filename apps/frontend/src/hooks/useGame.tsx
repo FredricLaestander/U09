@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
+import { useUpdateStatisticsMutation } from '../lib/mutations'
 import { draw, drawInitialCards } from '../lib/requests'
-import { calculateScore, getWinner, has21 } from '../lib/score'
+import { calculateScore, getWinner, has21, outcomeMap } from '../lib/score'
 import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
 import { sleep } from '../utils/sleep'
@@ -47,6 +48,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     throwOnError: true,
   })
 
+  const { mutate: handleOutcome } = useUpdateStatisticsMutation()
+
   useEffect(() => {
     if (!dealer || !player || !deck) return
 
@@ -78,6 +81,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     if (turn === 'over') {
       const winner = getWinner(dealer.score, player.score)
       setWinner(winner)
+      handleOutcome(outcomeMap[winner])
       open('game-over')
     }
   }, [turn])

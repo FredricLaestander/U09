@@ -1,5 +1,6 @@
 import axios, { isAxiosError } from 'axios'
 import { deckSchema, type User } from '../types/data'
+import type { Outcome } from '../types/utils'
 import { backend } from './clients/backend'
 import { deckOfCards } from './clients/cards'
 import { calculateScore } from './score'
@@ -50,6 +51,10 @@ export const updateUsername = async (username: string): Promise<Response> => {
   } catch (error) {
     return handleError(error, 'Something went wrong when updating the username')
   }
+}
+
+export const updateStatistics = async (outcome: Outcome) => {
+  await backend.put('/statistics', { outcome })
 }
 
 const formatDeck = (response: unknown) => {
