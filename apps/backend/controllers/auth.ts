@@ -1,5 +1,6 @@
 import type { Response } from 'express'
 import { OAuth2Client, type TokenPayload } from 'google-auth-library'
+import { sha256 } from 'js-sha256'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'
 import { AuthError } from '../lib/error'
@@ -71,9 +72,9 @@ const findOrCreateUser = async (payload: TokenPayload) => {
 }
 
 const hashToken = (token: string) => {
-  const hasher = new Bun.CryptoHasher('sha256')
+  const hasher = sha256.create()
   hasher.update(token)
-  return hasher.digest('hex')
+  return hasher.hex()
 }
 
 const accessTokenOptions = {
@@ -90,7 +91,7 @@ const refreshTokenOptions = {
 
 const setTokens = async ({ id, res }: { id: string; res: Response }) => {
   const accessToken = jwt.sign(
-    { id, jwtid: Bun.randomUUIDv7() },
+    { id, jwtid: crypto.randomUUID() },
     process.env.ACCESS_TOKEN_SECRET!,
     {
       expiresIn: '15m',
@@ -98,7 +99,7 @@ const setTokens = async ({ id, res }: { id: string; res: Response }) => {
   )
 
   const refreshToken = jwt.sign(
-    { id, jwtid: Bun.randomUUIDv7() },
+    { id, jwtid: crypto.randomUUID() },
     process.env.REFRESH_TOKEN_SECRET!,
     {
       expiresIn: '7d',
