@@ -1,4 +1,4 @@
-import type { Response } from 'express'
+import type { CookieOptions, Response } from 'express'
 import { OAuth2Client, type TokenPayload } from 'google-auth-library'
 import { sha256 } from 'js-sha256'
 import jwt from 'jsonwebtoken'
@@ -77,15 +77,19 @@ const hashToken = (token: string) => {
   return hasher.hex()
 }
 
-const accessTokenOptions = {
+const tokenOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
+  sameSite: 'none'
+}
+
+const accessTokenOptions: CookieOptions = {
+  ...tokenOptions,
   maxAge: 15 * 60 * 1000, // 15 minutes
 }
 
-const refreshTokenOptions = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+const refreshTokenOptions: CookieOptions = {
+  ...tokenOptions,
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 }
 
