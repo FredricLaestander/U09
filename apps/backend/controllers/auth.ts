@@ -79,7 +79,7 @@ const hashToken = (token: string) => {
 
 const tokenOptions: CookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+  secure: true,
   sameSite: 'none',
 }
 
