@@ -52,6 +52,14 @@ export const hasBlackjack = (score: Participant['score']) => {
   return false
 }
 
+export const isSoftBust = (score: Participant['score']) => {
+  return score.soft > 21
+}
+
+export const isHardBust = (score: Participant['score']) => {
+  return score.hard > 21
+}
+
 export const getWinner = (
   dealerScore: Participant['score'],
   playerScore: Participant['score'],
@@ -93,7 +101,7 @@ export const outcomeMap: Record<NonNullable<Winner>, Outcome> = {
 }
 
 export const displayScore = (score: Participant['score']) => {
-  if (score.hard === score.soft) {
+  if (score.hard === score.soft || isSoftBust(score)) {
     return String(score.hard)
   }
 
