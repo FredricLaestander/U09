@@ -1,16 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
+import {
+  allHandsDone,
+  getPlayingHand,
+  updatePlayingHand,
+  updateWaitingHand,
+} from '../lib/hand'
 import { useUpdateStatisticsMutation } from '../lib/mutations'
 import { draw, drawInitialCards } from '../lib/requests'
 import { calculateScore, getWinner, has21, outcomeMap } from '../lib/score'
-import type { Deck } from '../types/data'
-import type { Participant, Winner } from '../types/utils'
+import type { Dealer, Deck, Hand, Player, Winner } from '../types/utils'
 import { sleep } from '../utils/sleep'
 import { useModal } from './useModal'
 
 const GameContext = createContext<{
-  dealer: Participant
-  player: Participant
+  dealer: Dealer
+  player: Player
   winner: Winner
   stand: () => void
   hit: () => void
@@ -20,11 +25,12 @@ const GameContext = createContext<{
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const { open } = useModal()
 
-  const [deck, setDeck] = useState<Omit<Deck, 'cards'> | null>(null)
-  const [dealer, setDealer] = useState<Participant | null>(null)
-  const [player, setPlayer] = useState<Participant | null>(null)
-  const [winner, setWinner] = useState<Winner>(null)
+  const [deck, setDeck] = useState<Deck | null>(null)
+  const [dealer, setDealer] = useState<Dealer | null>(null)
+  const [player, setPlayer] = useState<Player | null>(null)
+
   const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
+  const [winner, setWinner] = useState<Winner>(null)
 
   const start = async () => {
     const { deck, dealer, player } = await drawInitialCards()
@@ -33,7 +39,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setDealer(dealer)
     setPlayer(player)
 
-    if (has21(player.score)) {
+    if (has21(player.hands[0].score)) {
       await sleep(1000)
       setTurn('dealer')
     }
@@ -79,7 +85,13 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
 
     if (turn === 'over') {
-      const winner = getWinner(dealer.score, player.score)
+      const winners = player.hands.map((hand) =>
+        getWinner(dealer.score, hand.score),
+      )
+      const playerWin = winners.some((winner) => winner === 'player')
+      const dealerWin = winners.every((winner) => winner === 'dealer')
+      const winner = playerWin ? 'player' : dealerWin ? 'dealer' : 'tie'
+
       setWinner(winner)
       handleOutcome(outcomeMap[winner])
       open('game-over')
@@ -91,27 +103,50 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return null
   }
 
+  const next = async (hands: Hand[], status: 'stood' | 'bust' | '21') => {
+    await sleep(1000)
+
+    const updatedPlayingHand = updatePlayingHand(hands, { status: 'done' })
+    if (allHandsDone(updatedPlayingHand)) {
+      setPlayer({ ...player, hands: updatedPlayingHand })
+
+      switch (status) {
+        case 'bust':
+          return setTurn('over')
+        case 'stood':
+        case '21':
+          return setTurn('dealer')
+      }
+    }
+
+    const updatedWaitingHand = updateWaitingHand(updatedPlayingHand, {
+      status: 'playing',
+    })
+    setPlayer({ ...player, hands: updatedWaitingHand })
+  }
+
   const stand = async () => {
-    setTurn('dealer')
+    await next(player.hands, 'stood')
   }
 
   const hit = async () => {
     const { deck: updatedDeck, card } = await draw(deck.deck_id)
-
     setDeck(updatedDeck)
 
-    const cards = [...player.cards, card]
+    const { hand } = getPlayingHand(player.hands)
+
+    const cards = [...hand.cards, card]
     const score = calculateScore(cards)
-    setPlayer({ cards, score })
+    const hands = updatePlayingHand(player.hands, { cards, score })
+
+    setPlayer({ ...player, hands })
 
     if (has21(score)) {
-      await sleep(1000)
-      setTurn('dealer')
+      await next(hands, '21')
     }
 
     if (score.hard > 21) {
-      await sleep(1000)
-      setTurn('over')
+      await next(hands, 'bust')
     }
   }
 

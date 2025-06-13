@@ -56,11 +56,9 @@ export const cardSchema = z.object({
   suit: z.enum(suits).transform((suit) => suitMap[suit]),
   value: z.enum(values).transform((value) => valueMap[value]),
 })
-export type Card = z.infer<typeof cardSchema>
 
 export const deckSchema = z.object({
   deck_id: z.string(),
   remaining: z.number(),
   cards: z.array(cardSchema),
 })
-export type Deck = z.infer<typeof deckSchema>

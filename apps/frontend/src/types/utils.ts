@@ -1,17 +1,30 @@
 import type { ComponentPropsWithoutRef, ElementType } from 'react'
-import type { Card } from './data'
+import type { z } from 'zod'
+import type { cardSchema, deckSchema } from './data'
 
 export type Number = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10'
 export type Value = Number | 'J' | 'Q' | 'K' | 'A'
 export type Suit = 'heart' | 'diamond' | 'club' | 'spade'
 
-export type Participant = {
-  cards: (Card & { id: string; open: boolean })[]
-  score: {
-    soft: number
-    hard: number
-    cardLength: number
-  }
+export type Deck = Omit<z.infer<typeof deckSchema>, 'cards'>
+type Card = z.infer<typeof cardSchema> & { id: string; open: boolean }
+type Score = {
+  soft: number
+  hard: number
+  cardLength: number
+}
+
+type Status = 'waiting' | 'playing' | 'done'
+export type Hand = {
+  id: string
+  cards: Card[]
+  score: Score
+  status: Status
+}
+
+export type Dealer = Omit<Hand, 'id' | 'status'>
+export type Player = {
+  hands: Hand[]
 }
 
 export type Winner = 'dealer' | 'player' | 'tie' | null
