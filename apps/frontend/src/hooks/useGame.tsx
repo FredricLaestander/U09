@@ -2,7 +2,14 @@ import { useQuery } from '@tanstack/react-query'
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import { useUpdateStatisticsMutation } from '../lib/mutations'
 import { draw, drawInitialCards } from '../lib/requests'
-import { calculateScore, getWinner, has21, outcomeMap } from '../lib/score'
+import {
+  calculateScore,
+  getWinner,
+  has21,
+  isHardBust,
+  isSoftBust,
+  outcomeMap,
+} from '../lib/score'
 import type { Deck } from '../types/data'
 import type { Participant, Winner } from '../types/utils'
 import { sleep } from '../utils/sleep'
@@ -61,7 +68,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setDealer({ cards, score })
         await sleep()
 
-        while (score.soft < 17 || (score.soft > 21 && score.hard < 17)) {
+        while (score.soft < 17 || (isSoftBust(score) && score.hard < 17)) {
           const { deck: updatedDeck, card } = await draw(deck.deck_id)
           setDeck(updatedDeck)
 
@@ -109,7 +116,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       setTurn('dealer')
     }
 
-    if (score.hard > 21) {
+    if (isHardBust(score)) {
       await sleep(1000)
       setTurn('over')
     }
