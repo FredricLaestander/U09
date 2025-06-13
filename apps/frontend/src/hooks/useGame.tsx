@@ -28,6 +28,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['initial-cards'],
     queryFn: drawInitialCards,
+    refetchOnWindowFocus: false,
   })
 
   useEffect(() => {
