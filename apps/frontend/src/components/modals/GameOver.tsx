@@ -27,7 +27,11 @@ export const GameOver = () => {
   const { user } = useAuth()
 
   return (
-    <Wrapper type="game-over" classname="w-full flex flex-col px-4 sm:p-0">
+    <Wrapper
+      type="game-over"
+      onDismiss={reset}
+      classname="w-full flex flex-col px-4 sm:p-0"
+    >
       <DialogTitle className="text-center text-2xl font-black">
         {getTitle(winner)}
       </DialogTitle>

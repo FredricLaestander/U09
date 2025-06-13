@@ -6,16 +6,24 @@ import { cn } from '../../utils/classname'
 export const Wrapper = ({
   children,
   type,
+  onDismiss,
   classname,
 }: {
   children: ReactNode
   type: ModalType
+  onDismiss?: () => void
   classname?: string
 }) => {
   const { isOpen, close } = useModal()
 
   return (
-    <Primitive.Root open={isOpen(type)} onOpenChange={close}>
+    <Primitive.Root
+      open={isOpen(type)}
+      onOpenChange={() => {
+        onDismiss?.()
+        close()
+      }}
+    >
       <Primitive.Portal>
         <Primitive.Overlay className="fixed inset-0 z-40 bg-slate-700/80 backdrop-blur-sm" />
         <Primitive.Content
