@@ -1,4 +1,23 @@
-import type { Hand } from '../types/utils'
+import type { Card, Hand, Status } from '../types/utils'
+import { calculateScore } from './score'
+
+export const createHand = ({
+  cards,
+  base,
+  status,
+}: {
+  cards: Card[]
+  base?: Hand
+  status?: Status
+}): Hand => {
+  return {
+    ...(base || {}),
+    id: base?.id || crypto.randomUUID(),
+    cards,
+    score: calculateScore(cards),
+    status: status || base?.status || 'waiting',
+  }
+}
 
 export const getPlayingHand = (hands: Hand[]) => {
   const condition = (hand: Hand) => hand.status === 'playing'
@@ -9,6 +28,33 @@ export const getPlayingHand = (hands: Hand[]) => {
   }
 }
 
+export const addCardToHand = ({
+  hand,
+  card,
+}: {
+  hand: Hand
+  card: Card
+}): Hand => {
+  const cards = [...hand.cards, card]
+  return {
+    ...hand,
+    cards,
+    score: calculateScore(cards),
+  }
+}
+
+export const updateHandById = ({
+  hands,
+  id,
+  updates,
+}: {
+  hands: Hand[]
+  id: string
+  updates: Partial<Hand>
+}) => {
+  return hands.map((hand) => (hand.id === id ? { ...hand, ...updates } : hand))
+}
+
 export const updatePlayingHand = (hands: Hand[], updates: Partial<Hand>) => {
   return hands.map((hand) =>
     hand.status === 'playing' ? { ...hand, ...updates } : hand,
@@ -16,9 +62,9 @@ export const updatePlayingHand = (hands: Hand[], updates: Partial<Hand>) => {
 }
 
 export const updateWaitingHand = (hands: Hand[], updates: Partial<Hand>) => {
-  const { index: playingIndex } = getPlayingHand(hands)
+  const waitingIndex = hands.findIndex(({ status }) => status === 'waiting')
   return hands.map((hand, index) =>
-    index === playingIndex + 1 ? { ...hand, ...updates } : hand,
+    index === waitingIndex ? { ...hand, ...updates } : hand,
   )
 }
 
