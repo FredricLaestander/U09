@@ -94,8 +94,8 @@ const PlayerHands = () => {
   const { player } = useGame()
 
   return (
-    <section>
-      {player.hands.map(({ id, cards, score }) => (
+    <section className="flex items-end gap-16">
+      {[...player.hands].reverse().map(({ id, cards, score, status }) => (
         <div
           key={id}
           style={{
@@ -103,7 +103,11 @@ const PlayerHands = () => {
               .fill('min-content')
               .join(' '),
           }}
-          className="relative grid pb-6 md:pb-0"
+          className={cn(
+            'relative grid pb-6 md:pb-0',
+            player.hands.length > 1 && status === 'playing' && 'mb-4',
+            player.hands.length > 1 && status !== 'playing' && 'opacity-50',
+          )}
         >
           {cards.map(({ id, suit, value }, index) => (
             <CardFront
@@ -140,11 +144,12 @@ const PlayerHandsSkeleton = () => {
 }
 
 const Actions = () => {
-  const { stand, hit, canSplit, actionsDisabled } = useGame()
+  const { stand, hit, split, canSplit, actionsDisabled } = useGame()
 
   return (
     <nav className="flex w-full max-w-sm flex-col gap-3 md:absolute md:top-1/2 md:left-1/2 md:-translate-1/2">
       <Button
+        onClick={split}
         disabled={!canSplit || actionsDisabled}
         variant="blue"
         size="sm"

@@ -3,6 +3,7 @@ import { deckSchema, type User } from '../types/data'
 import type { Dealer, Deck, Outcome, Player } from '../types/utils'
 import { backend } from './clients/backend'
 import { deckOfCards } from './clients/cards'
+import { createHand } from './hand'
 import { calculateScore } from './score'
 
 type Response =
@@ -96,27 +97,20 @@ export const drawInitialCards = async (): Promise<{
     deck,
     dealer: { cards: dealerCards, score: calculateScore(dealerCards) },
     player: {
-      hands: [
-        {
-          id: crypto.randomUUID(),
-          cards: playerCards,
-          score: calculateScore(playerCards),
-          status: 'playing',
-        },
-      ],
+      hands: [createHand({ cards: playerCards, status: 'playing' })],
     },
   }
 }
 
-export const draw = async (deckId: string) => {
+export const draw = async (deckId: string, count: number = 1) => {
   const response = await deckOfCards.get(`/${deckId}/draw`, {
-    params: { count: '1' },
+    params: { count },
   })
   const { deck, cards } = formatDeck(response.data)
 
   return {
     deck,
-    card: cards[0],
+    cards,
   }
 }
 
