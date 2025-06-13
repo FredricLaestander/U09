@@ -25,6 +25,7 @@ const GameContext = createContext<{
   player: Player
   winner: Winner
   actionsDisabled: boolean
+  canSplit: boolean
   stand: () => void
   hit: () => void
   reset: () => Promise<void>
@@ -37,8 +38,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [dealer, setDealer] = useState<Dealer | null>(null)
   const [player, setPlayer] = useState<Player | null>(null)
 
-  const [winner, setWinner] = useState<Winner>(null)
+  const [canSplit, setCanSplit] = useState(false)
   const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
+  const [winner, setWinner] = useState<Winner>(null)
   const [actionsDisabled, setActionsDisabled] = useState(false)
 
   const { data, refetch } = useSuspenseQuery({
@@ -54,7 +56,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setDealer(data.dealer)
     setPlayer(data.player)
 
-    if (has21(data.player.hands[0].score)) {
+    const firstHand = data.player.hands[0]
+    setCanSplit(firstHand.cards[0].value === firstHand.cards[1].value)
+
+    if (has21(firstHand.score)) {
       setActionsDisabled(true)
       sleep(1000).then(() => setTurn('dealer'))
     }
@@ -171,6 +176,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         dealer,
         player,
         winner,
+        canSplit,
         actionsDisabled,
         stand,
         hit,
