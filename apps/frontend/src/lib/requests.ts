@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios'
 import { deckSchema, type User } from '../types/data'
-import type { Outcome } from '../types/utils'
+import type { Dealer, Deck, Outcome, Player } from '../types/utils'
 import { backend } from './clients/backend'
 import { deckOfCards } from './clients/cards'
 import { calculateScore } from './score'
@@ -75,7 +75,11 @@ const formatDeck = (response: unknown) => {
   return { cards, deck }
 }
 
-export const drawInitialCards = async () => {
+export const drawInitialCards = async (): Promise<{
+  deck: Deck
+  dealer: Dealer
+  player: Player
+}> => {
   const response = await deckOfCards.get('/new/draw', {
     params: {
       count: '4',
@@ -90,8 +94,17 @@ export const drawInitialCards = async () => {
 
   return {
     deck,
-    player: { cards: playerCards, score: calculateScore(playerCards) },
     dealer: { cards: dealerCards, score: calculateScore(dealerCards) },
+    player: {
+      hands: [
+        {
+          id: crypto.randomUUID(),
+          cards: playerCards,
+          score: calculateScore(playerCards),
+          status: 'playing',
+        },
+      ],
+    },
   }
 }
 

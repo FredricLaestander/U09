@@ -20,7 +20,7 @@ export const GamePage = () => {
       <main className="flex w-full grow flex-col items-center px-4 pb-4 md:pb-8">
         <div className="flex grow flex-col items-center justify-between pt-[12vh] md:pt-8">
           <DealerHand />
-          <PlayerHand />
+          <PlayerHands />
         </div>
         <Actions />
       </main>
@@ -66,38 +66,43 @@ const DealerHand = () => {
   )
 }
 
-const PlayerHand = () => {
+const PlayerHands = () => {
   const { player } = useGame()
 
   return (
-    <section
-      style={{
-        gridTemplateColumns: Array(player.cards.length)
-          .fill('min-content')
-          .join(' '),
-      }}
-      className="relative grid pb-6 md:pb-0"
-    >
-      {player.cards.map(({ id, suit, value }, index) => (
-        <CardFront
+    <section>
+      {player.hands.map(({ id, cards, score }) => (
+        <div
           key={id}
-          suit={suit}
-          value={value}
           style={{
-            gridColumn: `${index + 1} / ${index + 3}`,
+            gridTemplateColumns: Array(cards.length)
+              .fill('min-content')
+              .join(' '),
           }}
-          classname={cn(
-            'row-1',
-            index % 2 === 0 && '-rotate-2',
-            index % 2 === 1 && 'rotate-2',
-          )}
-          size="md"
-        />
+          className="relative grid pb-6 md:pb-0"
+        >
+          {cards.map(({ id, suit, value }, index) => (
+            <CardFront
+              key={id}
+              suit={suit}
+              value={value}
+              style={{
+                gridColumn: `${index + 1} / ${index + 3}`,
+              }}
+              classname={cn(
+                'row-1',
+                index % 2 === 0 && '-rotate-2',
+                index % 2 === 1 && 'rotate-2',
+              )}
+              size="md"
+            />
+          ))}
+          <Count
+            value={displayScore(score)}
+            classname="absolute top-4 left-[calc(100%_-_2rem)]"
+          />
+        </div>
       ))}
-      <Count
-        value={displayScore(player.score)}
-        classname="absolute top-4 left-[calc(100%_-_2rem)]"
-      />
     </section>
   )
 }
