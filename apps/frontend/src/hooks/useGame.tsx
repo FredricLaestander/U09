@@ -12,6 +12,7 @@ const GameContext = createContext<{
   dealer: Participant
   player: Participant
   winner: Winner
+  actionsDisabled: boolean
   stand: () => void
   hit: () => void
   reset: () => Promise<void>
@@ -25,6 +26,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [player, setPlayer] = useState<Participant | null>(null)
   const [winner, setWinner] = useState<Winner>(null)
   const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
+  const [actionsDisabled, setActionsDisabled] = useState(false)
 
   const start = async () => {
     const { deck, dealer, player } = await drawInitialCards()
@@ -34,6 +36,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setPlayer(player)
 
     if (has21(player.score)) {
+      setActionsDisabled(true)
       await sleep(1000)
       setTurn('dealer')
     }
@@ -55,6 +58,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     if (turn === 'dealer') {
       const run = async () => {
+        setActionsDisabled(true)
+        await sleep(1000)
+
         let cards = dealer.cards.map((card) => ({ ...card, open: true }))
         let score = calculateScore(cards)
 
@@ -105,12 +111,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setPlayer({ cards, score })
 
     if (has21(score)) {
-      await sleep(1000)
       setTurn('dealer')
     }
 
     if (score.hard > 21) {
-      await sleep(1000)
       setTurn('over')
     }
   }
@@ -121,6 +125,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setPlayer(null)
     setWinner(null)
     setTurn('player')
+    setActionsDisabled(false)
     await start()
   }
 
@@ -130,6 +135,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         dealer,
         player,
         winner,
+        actionsDisabled,
         stand,
         hit,
         reset,
