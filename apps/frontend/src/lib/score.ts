@@ -1,8 +1,6 @@
-import type { Outcome, Participant, Winner } from '../types/utils'
+import type { Hand, Outcome, Winner } from '../types/utils'
 
-export const calculateScore = (
-  cards: Participant['cards'],
-): Participant['score'] => {
+export const calculateScore = (cards: Hand['cards']): Hand['score'] => {
   let hard = 0
   let soft = 0
 
@@ -24,7 +22,7 @@ export const calculateScore = (
   return { hard, soft, cardLength: cards.length }
 }
 
-const getHighestValidScore = (score: Participant['score']) => {
+const getHighestValidScore = (score: Hand['score']) => {
   if (score.soft <= 21) {
     return score.soft
   }
@@ -36,7 +34,7 @@ const getHighestValidScore = (score: Participant['score']) => {
   return null
 }
 
-export const has21 = (score: Participant['score']) => {
+export const has21 = (score: Hand['score']) => {
   if (score.soft === 21 || score.hard === 21) {
     return true
   }
@@ -44,7 +42,7 @@ export const has21 = (score: Participant['score']) => {
   return false
 }
 
-export const hasBlackjack = (score: Participant['score']) => {
+export const hasBlackjack = (score: Hand['score']) => {
   if (has21(score) && score.cardLength === 2) {
     return true
   }
@@ -52,17 +50,17 @@ export const hasBlackjack = (score: Participant['score']) => {
   return false
 }
 
-export const isSoftBust = (score: Participant['score']) => {
+export const isSoftBust = (score: Hand['score']) => {
   return score.soft > 21
 }
 
-export const isHardBust = (score: Participant['score']) => {
+export const isHardBust = (score: Hand['score']) => {
   return score.hard > 21
 }
 
 export const getWinner = (
-  dealerScore: Participant['score'],
-  playerScore: Participant['score'],
+  dealerScore: Hand['score'],
+  playerScore: Hand['score'],
 ): NonNullable<Winner> => {
   const highestDealerScore = getHighestValidScore(dealerScore)
   const highestPlayerScore = getHighestValidScore(playerScore)
@@ -100,7 +98,7 @@ export const outcomeMap: Record<NonNullable<Winner>, Outcome> = {
   tie: 'tie',
 }
 
-export const displayScore = (score: Participant['score']) => {
+export const displayScore = (score: Hand['score']) => {
   if (score.hard === score.soft || isSoftBust(score)) {
     return String(score.hard)
   }
