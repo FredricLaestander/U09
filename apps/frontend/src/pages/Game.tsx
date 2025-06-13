@@ -108,7 +108,7 @@ const PlayerHands = () => {
 }
 
 const Actions = () => {
-  const { stand, hit } = useGame()
+  const { stand, hit, canSplit } = useGame()
 
   return (
     <nav className="flex w-full max-w-sm flex-col gap-3 md:absolute md:top-1/2 md:left-1/2 md:-translate-1/2">
@@ -116,6 +116,7 @@ const Actions = () => {
         variant="blue"
         size="sm"
         className="top-1/2 -translate-y-1/2 self-end md:absolute md:left-[calc(100%_+_0.75rem)]"
+        disabled={!canSplit}
       >
         Split
       </Button>

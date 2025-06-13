@@ -17,6 +17,7 @@ const GameContext = createContext<{
   dealer: Dealer
   player: Player
   winner: Winner
+  canSplit: boolean
   stand: () => void
   hit: () => void
   reset: () => Promise<void>
@@ -29,6 +30,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [dealer, setDealer] = useState<Dealer | null>(null)
   const [player, setPlayer] = useState<Player | null>(null)
 
+  const [canSplit, setCanSplit] = useState(false)
+
   const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
   const [winner, setWinner] = useState<Winner>(null)
 
@@ -39,7 +42,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setDealer(dealer)
     setPlayer(player)
 
-    if (has21(player.hands[0].score)) {
+    const firstHand = player.hands[0]
+    setCanSplit(firstHand.cards[0].value === firstHand.cards[1].value)
+
+    if (has21(firstHand.score)) {
       await sleep(1000)
       setTurn('dealer')
     }
@@ -165,6 +171,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         dealer,
         player,
         winner,
+        canSplit,
         stand,
         hit,
         reset,
