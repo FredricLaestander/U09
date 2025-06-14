@@ -76,16 +76,15 @@ const formatDeck = (response: unknown) => {
   return { cards, deck }
 }
 
-export const drawInitialCards = async (): Promise<{
+export const drawInitialCards = async (
+  deckId?: string,
+): Promise<{
   deck: Deck
   dealer: Dealer
   player: Player
 }> => {
-  const response = await deckOfCards.get('/new/draw', {
-    params: {
-      count: '4',
-      deck_count: '6',
-    },
+  const response = await deckOfCards.get(`/${deckId}/draw`, {
+    params: { count: '4' },
   })
 
   const { deck, cards } = formatDeck(response.data)
