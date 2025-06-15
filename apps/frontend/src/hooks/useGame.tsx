@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import { useUpdateStatisticsMutation } from '../lib/mutations'
 import { draw, drawInitialCards } from '../lib/requests'
@@ -33,29 +33,22 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [winner, setWinner] = useState<Winner>(null)
   const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
 
-  const start = async () => {
-    const { deck, dealer, player } = await drawInitialCards()
-
-    setDeck(deck)
-    setDealer(dealer)
-    setPlayer(player)
-
-    if (has21(player.score)) {
-      await sleep(1000)
-      setTurn('dealer')
-    }
-  }
-
-  const { isPending } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['initial-cards'],
-    queryFn: async () => {
-      await start()
-      return { success: true } // a queryFn needs to return something but we won't use this
-    },
-    throwOnError: true,
+    queryFn: drawInitialCards,
   })
 
   const { mutate: handleOutcome } = useUpdateStatisticsMutation()
+
+  useEffect(() => {
+    setDeck(data.deck)
+    setDealer(data.dealer)
+    setPlayer(data.player)
+
+    if (has21(data.player.score)) {
+      sleep(1000).then(() => setTurn('dealer'))
+    }
+  }, [data])
 
   useEffect(() => {
     if (!dealer || !player || !deck) return
@@ -93,21 +86,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [turn])
 
-  if (isPending || !dealer || !player || !deck) {
-    // TODO: create loading screen
-    return null
-  }
-
   const stand = async () => {
     setTurn('dealer')
   }
 
   const hit = async () => {
-    const { deck: updatedDeck, card } = await draw(deck.deck_id)
+    const { deck: updatedDeck, card } = await draw(deck!.deck_id)
 
     setDeck(updatedDeck)
 
-    const cards = [...player.cards, card]
+    const cards = [...player!.cards, card]
     const score = calculateScore(cards)
     setPlayer({ cards, score })
 
@@ -128,8 +116,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setPlayer(null)
     setWinner(null)
     setTurn('player')
-    await start()
+    await refetch()
   }
+
+  // this will never happen, it's just here to make typescript happy
+  if (!dealer || !player) return null
 
   return (
     <GameContext.Provider
