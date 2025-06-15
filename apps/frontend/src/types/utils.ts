@@ -7,14 +7,14 @@ export type Value = Number | 'J' | 'Q' | 'K' | 'A'
 export type Suit = 'heart' | 'diamond' | 'club' | 'spade'
 
 export type Deck = Omit<z.infer<typeof deckSchema>, 'cards'>
-type Card = z.infer<typeof cardSchema> & { id: string; open: boolean }
+export type Card = z.infer<typeof cardSchema> & { id: string; open: boolean }
 type Score = {
   soft: number
   hard: number
   cardLength: number
 }
 
-type Status = 'waiting' | 'playing' | 'done'
+export type Status = 'waiting' | 'playing' | 'done'
 export type Hand = {
   id: string
   cards: Card[]
