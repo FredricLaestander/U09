@@ -135,11 +135,12 @@ const PlayerHandSkeleton = () => {
 }
 
 const Actions = () => {
-  const { stand, hit } = useGame()
+  const { stand, hit, actionsDisabled } = useGame()
 
   return (
     <nav className="flex w-full max-w-sm flex-col gap-3 md:absolute md:top-1/2 md:left-1/2 md:-translate-1/2">
       <Button
+        disabled={actionsDisabled}
         variant="blue"
         size="sm"
         className="top-1/2 -translate-y-1/2 self-end md:absolute md:left-[calc(100%_+_0.75rem)]"
@@ -150,6 +151,7 @@ const Actions = () => {
       <div className="flex gap-3">
         <Button
           onClick={hit}
+          disabled={actionsDisabled}
           variant="green"
           icon={Plus}
           className="flex-1 md:w-36"
@@ -158,6 +160,7 @@ const Actions = () => {
         </Button>
         <Button
           onClick={stand}
+          disabled={actionsDisabled}
           variant="red"
           icon={X}
           className="flex-1 md:w-36"
