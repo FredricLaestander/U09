@@ -83,9 +83,15 @@ export const drawInitialCards = async (
   dealer: Dealer
   player: Player
 }> => {
-  const response = await deckOfCards.get(`/${deckId}/draw`, {
-    params: { count: '4' },
-  })
+  const response = await deckOfCards.get(
+    deckId ? `/${deckId}/draw` : '/new/draw',
+    {
+      params: {
+        count: '4',
+        deck_count: deckId ? null : '6',
+      },
+    },
+  )
 
   const { deck, cards } = formatDeck(response.data)
 
