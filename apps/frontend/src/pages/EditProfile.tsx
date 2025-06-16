@@ -39,7 +39,7 @@ export const EditProfilePage = () => {
     <>
       <Header>
         <BackButton />
-        <h1 className="inset-x-0 text-2xl font-black md:absolute md:text-center">
+        <h1 className="pointer-events-none inset-x-0 text-2xl font-black md:absolute md:text-center">
           Edit profile
         </h1>
       </Header>
