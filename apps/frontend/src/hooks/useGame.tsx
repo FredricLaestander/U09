@@ -35,6 +35,8 @@ const GameContext = createContext<{
   reset: () => Promise<void>
 } | null>(null)
 
+const fullDeckSize = 52 * 6
+
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const { open } = useModal()
 
@@ -46,10 +48,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [turn, setTurn] = useState<'player' | 'dealer' | 'over'>('player')
   const [winner, setWinner] = useState<Winner>(null)
   const [actionsDisabled, setActionsDisabled] = useState(false)
+  const shuffle = !deck || deck.remaining <= fullDeckSize / 3
 
   const { data, refetch } = useSuspenseQuery({
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: ['initial-cards'],
-    queryFn: drawInitialCards,
+    queryFn: async () => drawInitialCards(shuffle ? undefined : deck.deck_id),
     refetchOnWindowFocus: false,
   })
 
